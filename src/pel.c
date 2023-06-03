@@ -22,15 +22,12 @@ void draw_circle_cb(int x, int y, png_bytep px)
 
     y = img_center_y - y;
 
-    printf("%i %i\n", x, y);
-
     // (y - yoffset)² = r² - (x - xoffset)²
     if (((y - circle_y) * (y - circle_y)) -
         (circle_r * circle_r - (x - circle_x) * (x - circle_x)) < circle_r &&
         ((y - circle_y) * (y - circle_y)) -
         (circle_r * circle_r - (x - circle_x) * (x - circle_x)) > -1 * circle_r )
     {
-        printf("true\n");
         px[0] = 0;
         px[1] = 0;
         px[2] = 0;
