@@ -6,6 +6,9 @@
 *
 ***************************************************************************************/
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "png-easy.h"
 
 int png_easy_read(char* filename, png_easy_png_t* png_easy)
@@ -69,6 +72,66 @@ int png_easy_read(char* filename, png_easy_png_t* png_easy)
     return 0;
 }
 
+int png_easy_create_empty(char* filename, int width, int height)
+{
+    FILE *fp;
+    png_structp png_ptr = NULL;
+    png_infop info_ptr = NULL;
+    png_bytep row = NULL;
+
+    fp = fopen(filename, "wb");
+    if (!fp) return -1;
+
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_ptr) return -1;
+
+    info_ptr = png_create_info_struct(png_ptr);
+    if (!info_ptr)
+    {
+        png_destroy_write_struct(&png_ptr, NULL);
+        fclose(fp);
+        return -1;
+    }
+
+    // Set the output file
+    png_init_io(png_ptr, fp);
+
+    // Set the image attributes
+    png_set_IHDR(
+        png_ptr,
+        info_ptr,
+        width,
+        height,
+        8, // Bit depth per channel (8-bit in this case)
+        PNG_COLOR_TYPE_RGBA,
+        PNG_INTERLACE_NONE,
+        PNG_COMPRESSION_TYPE_DEFAULT,
+        PNG_FILTER_TYPE_DEFAULT);
+
+    // Write the PNG header
+    png_write_info(png_ptr, info_ptr);
+
+    // Allocate memory for the row data
+    row = (png_bytep)malloc(4 * width * sizeof(png_byte));
+
+    // Write empty rows (optional)
+    memset(row, 0, 4 * width * sizeof(png_byte));
+    for (int i = 0; i < height; i++)
+    {
+        png_write_row(png_ptr, row);
+    }
+
+    // End writing
+    png_write_end(png_ptr, NULL);
+
+    // Clean up
+    png_destroy_write_struct(&png_ptr, &info_ptr);
+    fclose(fp);
+    free(row);
+
+    return 0;
+}
+
 int png_easy_write(char* filename, png_bytep* row_pointers, int width, int height)
 {
     int y;
@@ -99,7 +162,7 @@ int png_easy_write(char* filename, png_bytep* row_pointers, int width, int heigh
         PNG_FILTER_TYPE_DEFAULT);
     png_write_info(png, info);
 
-    png_set_filler(png, 0, PNG_FILLER_AFTER);
+    //png_set_filler(png, 0, PNG_FILLER_AFTER);
 
     if (!row_pointers) return -1;
 
