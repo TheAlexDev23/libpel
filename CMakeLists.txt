@@ -5,6 +5,8 @@ enable_testing()
 
 set(CMAKE_BUILD_TYPE Debug)
 
+include_directories(include)
+
 add_library(
     ${PROJECT_NAME}
     src/pel.c

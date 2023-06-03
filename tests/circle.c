@@ -10,7 +10,7 @@ int main()
         return -1;
     }
 
-    if (pel_draw_circle("file.png", 0, 0, 23))
+    if (pel_draw_circle("file.png", PEL_COLOR_BLUE, 10, 6, 15))
     {
         printf("Error during draw circle\n");
         return -1;
