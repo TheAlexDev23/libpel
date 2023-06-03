@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.26.4)
 project(pel)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_library(
     ${PROJECT_NAME}
     src/pel.c

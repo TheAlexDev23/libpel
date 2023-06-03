@@ -193,4 +193,6 @@ int png_easy_draw(png_easy_png_t png, void (*draw_cb)(int x, int y, png_bytep px
             draw_cb(x, y, px);
         }
     }
+
+    return 0;
 }
