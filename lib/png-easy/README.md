@@ -1,0 +1,1 @@
+# Wrapper library around libpng for easier png manipulation
