@@ -1,5 +1,5 @@
 /***************************************************************************************
-* This code has been modified from open source software:
+* Parts of this code have been modified from open source software. Said software:
 *    Title: libpng_test.c
 *    Author: niw
 *    Availability: https://gist.github.com/niw/5963798
@@ -67,4 +67,67 @@ int png_easy_read(char* filename, png_easy_png_t* png_easy)
     png_destroy_read_struct(&png, &info, NULL);
 
     return 0;
+}
+
+int png_easy_write(char* filename, png_bytep* row_pointers, int width, int height)
+{
+    int y;
+
+    FILE *fp = fopen(filename, "wb");
+    if (!fp) return -1;
+
+    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png) return -1;
+
+    png_infop info = png_create_info_struct(png);
+    if (!info)
+        return -1;
+
+    if (setjmp(png_jmpbuf(png))) return -1;
+
+    png_init_io(png, fp);
+
+    // Output is 8bit depth, RGBA format.
+    png_set_IHDR(
+        png,
+        info,
+        width, height,
+        8,
+        PNG_COLOR_TYPE_RGBA,
+        PNG_INTERLACE_NONE,
+        PNG_COMPRESSION_TYPE_DEFAULT,
+        PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png, info);
+
+    png_set_filler(png, 0, PNG_FILLER_AFTER);
+
+    if (!row_pointers) return -1;
+
+    png_write_image(png, row_pointers);
+    png_write_end(png, NULL);
+
+    for (int y = 0; y < height; y++)
+    {
+        free(row_pointers[y]);
+    }
+    free(row_pointers);
+
+    fclose(fp);
+
+    png_destroy_write_struct(&png, &info);
+
+    return 0;
+}
+
+int png_easy_draw(png_easy_png_t* png, void (*draw_cb(int x, int y, png_bytep px)))
+{
+    for (int y = 0; y < png->height; y++)
+    {
+        png_bytep row = png->row_pointers[y];
+        for (int x = 0; x < png->width; x++)
+        {
+            png_bytep px = &(row[x * 4]);
+            draw_cb(x, y, px);
+        }
+    }
 }
