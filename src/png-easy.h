@@ -17,9 +17,9 @@ int png_easy_read(char* filename, png_easy_png_t* png_easy);
 int png_easy_create_empty(char* filename, int width, int height);
 
 /* Writes row_pointers into filename if succesful */
-int png_easy_write(char* filename, png_bytep* row_pointers, int width, int height);
+int png_easy_write(char* filename, png_easy_png_t png_easy);
 
 /* Draws png by calling draw_cb for each pixel */
-int png_easy_draw(png_easy_png_t* png, void (*draw_cb(int x, int y, png_bytep px)));
+int png_easy_draw(png_easy_png_t png, void (*draw_cb)(int x, int y, png_bytep px));
 
 #endif
