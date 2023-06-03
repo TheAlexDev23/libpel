@@ -22,4 +22,9 @@ extern int pel_init(char* filename, int height, int width);
 */
 extern int pel_draw_circle(char* filename, pel_color_t brush_color, int x, int y, int r);
 
+/* 
+* Draws filled circle of radius r with it's center at image center + (x, y) to filename 
+* Filename needs to be valid png otherwise will return -1
+*/
+extern int pel_draw_circle_full(char* filename, pel_color_t brush_color, int x, int y, int r);
 #endif
