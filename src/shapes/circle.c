@@ -37,8 +37,15 @@ void draw_circle_full_cb(int x, int y, png_bytep px)
     }
 }
 
-int draw_circle_base(char* filename, pel_color_t brush_color, int x, int y, int r, _png_easy_draw_cb draw_cb)
+int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_draw_cb draw_cb)
 {
+    pel_handle_t* handle;
+    if ((handle = _pel_get_cur_handle()) == NULL)
+    {
+        // TODO: Add error code
+        return -1;
+    }
+
     png_easy_png_t png;
 
     circle_r = r;
@@ -47,9 +54,9 @@ int draw_circle_base(char* filename, pel_color_t brush_color, int x, int y, int 
 
     _set_color(brush_color);
 
-    if (_png_easy_read(filename, &png) ||
+    if (_png_easy_read(handle->_fn, &png) ||
         _png_easy_draw(png, draw_cb) ||
-        _png_easy_write(filename, png))
+        _png_easy_write(handle->_fn, png))
     {
         return -1;
     }
@@ -57,12 +64,12 @@ int draw_circle_base(char* filename, pel_color_t brush_color, int x, int y, int 
     return 0;
 }
 
-int pel_draw_circle(char* filename, pel_color_t brush_color, int x, int y, int r)
+int pel_draw_circle(pel_color_t brush_color, int x, int y, int r)
 {
-    return draw_circle_base(filename, brush_color, x, y, r, draw_circle_cb);
+    return draw_circle_base(brush_color, x, y, r, draw_circle_cb);
 }
 
-int pel_draw_circle_full(char* filename, pel_color_t brush_color, int x, int y, int r)
+int pel_draw_circle_full(pel_color_t brush_color, int x, int y, int r)
 {
-    return draw_circle_base(filename, brush_color, x, y, r, draw_circle_full_cb);
+    return draw_circle_base(brush_color, x, y, r, draw_circle_full_cb);
 }
