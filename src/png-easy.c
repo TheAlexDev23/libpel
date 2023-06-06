@@ -11,7 +11,7 @@
 
 #include "png-easy.h"
 
-int png_easy_read(char* filename, png_easy_png_t* png_easy)
+int _png_easy_read(char* filename, png_easy_png_t* png_easy)
 {
     FILE *fp = fopen(filename, "rb");
 
@@ -72,7 +72,7 @@ int png_easy_read(char* filename, png_easy_png_t* png_easy)
     return 0;
 }
 
-int png_easy_create_empty(char* filename, int width, int height)
+int _png_easy_create_empty(char* filename, int width, int height)
 {
     FILE *fp;
     png_structp png_ptr = NULL;
@@ -132,7 +132,7 @@ int png_easy_create_empty(char* filename, int width, int height)
     return 0;
 }
 
-int png_easy_write(char* filename, png_easy_png_t png_easy)
+int _png_easy_write(char* filename, png_easy_png_t png_easy)
 {
     int y;
 
@@ -182,7 +182,7 @@ int png_easy_write(char* filename, png_easy_png_t png_easy)
     return 0;
 }
 
-int png_easy_draw(png_easy_png_t png, void (*draw_cb)(int x, int y, png_bytep px))
+int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb)
 {
     for (int y = 0; y < png.height; y++)
     {

@@ -13,6 +13,7 @@ typedef struct _pel_color {
 #define PEL_COLOR_GREEN (pel_color_t){.r = 0, .g = 255, .b = 0, .a = 255}
 #define PEL_COLOR_BLUE (pel_color_t){.r = 0, .g = 0, .b = 255, .a = 255}
 
+
 /* Initializes png file */
 extern int pel_init(char* filename, int height, int width);
 

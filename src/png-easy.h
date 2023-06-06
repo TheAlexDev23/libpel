@@ -12,14 +12,16 @@ typedef struct _png_easy_png {
 } png_easy_png_t;
 
 /* Reads file filename writes to png_easy if succesful */
-int png_easy_read(char* filename, png_easy_png_t* png_easy);
+int _png_easy_read(char* filename, png_easy_png_t* png_easy);
 
-int png_easy_create_empty(char* filename, int width, int height);
+int _png_easy_create_empty(char* filename, int width, int height);
 
 /* Writes row_pointers into filename if succesful */
-int png_easy_write(char* filename, png_easy_png_t png_easy);
+int _png_easy_write(char* filename, png_easy_png_t png_easy);
+
+typedef void (*_png_easy_draw_cb)(int x, int y, png_bytep px);
 
 /* Draws png by calling draw_cb for each pixel */
-int png_easy_draw(png_easy_png_t png, void (*draw_cb)(int x, int y, png_bytep px));
+int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb);
 
 #endif

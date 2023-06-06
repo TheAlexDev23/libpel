@@ -10,6 +10,13 @@ include_directories(include)
 add_library(
     ${PROJECT_NAME}
     src/pel.c
+    src/handle.h
+    src/handle.c
+    src/image.c
+    src/image.h
+    src/pixel.c
+    src/pixel.h
+    src/circle.c
     src/png-easy.c
     src/png-easy.h
 )
