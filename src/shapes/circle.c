@@ -64,12 +64,12 @@ int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_dra
     return 0;
 }
 
-int pel_draw_circle(pel_color_t brush_color, int x, int y, int r)
+int pel_draw_circle(pel_color_t brush_color, pel_cord_t cords, int r)
 {
-    return draw_circle_base(brush_color, x, y, r, draw_circle_cb);
+    return draw_circle_base(brush_color, cords._x, cords._y, r, draw_circle_cb);
 }
 
-int pel_draw_circle_full(pel_color_t brush_color, int x, int y, int r)
+int pel_draw_circle_full(pel_color_t brush_color, pel_cord_t cords, int r)
 {
-    return draw_circle_base(brush_color, x, y, r, draw_circle_full_cb);
+    return draw_circle_base(brush_color, cords._x, cords._y, r, draw_circle_full_cb);
 }

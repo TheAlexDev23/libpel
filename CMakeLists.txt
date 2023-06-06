@@ -20,6 +20,7 @@ add_library(
     src/pixel.c
     src/pixel.h
     src/shapes/circle.c
+    #src/shapes/line.c
 )
 
 target_link_libraries(${PROJECT_NAME} png)
