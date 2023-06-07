@@ -41,4 +41,9 @@ extern int pel_draw_circle(pel_color_t brush_color, pel_cord_t cords, int r);
 */
 extern int pel_draw_circle_full(pel_color_t brush_color, pel_cord_t cords, int r);
 
+/*
+* Draws line from point start to point end
+*/
+extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end);
+
 #endif

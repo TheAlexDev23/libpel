@@ -196,3 +196,9 @@ int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb)
 
     return 0;
 }
+
+png_bytep _png_easy_px(png_easy_png_t png, int x, int y)
+{
+    png_bytep row = png.row_pointers[y];
+    return &(row[x * 4]);
+}

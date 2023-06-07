@@ -19,11 +19,13 @@ add_library(
     src/png-easy.h
     src/pixel.c
     src/pixel.h
+    src/state.h
     src/shapes/circle.c
-    #src/shapes/line.c
+    src/shapes/line.c
 )
 
 target_link_libraries(${PROJECT_NAME} png)
 
 add_subdirectory(tests)
 add_test(NAME Circle COMMAND tests/circle)
+add_test(NAME Line COMMAND tests/line)

@@ -4,5 +4,7 @@ project(tests)
 include_directories(../include)
 
 add_executable(circle circle.c)
+add_executable(line line.c)
 
 target_link_libraries(circle pel)
+target_link_libraries(line pel)
