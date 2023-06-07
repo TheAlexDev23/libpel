@@ -5,6 +5,7 @@
 #include "png-easy.h"
 #include "state.h"
 #include "pixel.h"
+#include "image.h"
 
 int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 {
@@ -21,30 +22,25 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     if (_png_easy_read(handle->_fn, &png)) return -1;
 
-    // Absolutely no idea how this works. It is the Bresenham's line algorithm
-
-    float m = (float)(end._y - start._y) / (float)(end._x - start._x);
-
-    printf("1\n");
+    int dx = end._x - start._x, dy = end._y - start._y;
+    int ix = 0, iy = 0;
+    if (dx > 0) ix = 1;
+    if (dx < 0) ix = -1;
+    if (dy > 0) iy = 1;
+    if (dy < 0) iy = -1;
 
     int err = 0;
-    int y = start._y;
-    for (int x = start._x; x < end._x; x++)
+
+    for (int x = start._x, y = start._y; x < end._x; x += ix)
     {
-        png_bytep px = _png_easy_px(png, x, y);
-        if (px == NULL) return -1;
-
-        _px_set_def_color(px);
-
-        if ((float)err + m < 0.5)
+        err += dy * iy;
+        if (err >= dx * ix)
         {
-            err += m;
+            y += iy;
+            err -= dx;
         }
-        else
-        {
-            y++;
-            err += m - 1;
-        }
+
+        _px_set_def_color(_png_easy_px(png, x, y));
     }
     
     if (_png_easy_write(handle->_fn, png)) return -1;
