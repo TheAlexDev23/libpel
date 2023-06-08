@@ -22,12 +22,19 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     if (_png_easy_read(handle->_fn, &png)) return -1;
 
+    // Change drawing directoin if going towards left on the x axis
     if (start._x > end._x)
     {
         pel_cord_t temp = start;
         start = end;
         end = temp;
     }
+
+    /* 
+    * This algorithm is known as Bresenham's Line algorithm
+    * It only uses integer opeartions which makes it a fast one
+    * However, it doesn't offer any anti alising resulting in pixel perfect lines
+    */
 
     int dx = end._x - start._x, dy = end._y - start._y;
     int ix = 0, iy = 0;
