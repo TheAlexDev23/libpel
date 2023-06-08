@@ -13,7 +13,14 @@ int circle_y;
 
 void draw_circle_cb(int x, int y, png_bytep px)
 {
-    get_xy_rel_center(x, y, _pel_get_cur_handle());
+    // The otuput of this macro is adapted to an image matrix not a mathematical grid
+    // get_xy_rel_center(x, y, _pel_get_cur_handle());
+
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return;
+
+    x = handle->_centerX - x;
+    y = handle->_centerY - y;
 
     // (y - yoffset)² = r² - (x - xoffset)²
     if (((y - circle_y) * (y - circle_y)) -
@@ -27,7 +34,11 @@ void draw_circle_cb(int x, int y, png_bytep px)
 
 void draw_circle_full_cb(int x, int y, png_bytep px)
 {
-    get_xy_rel_center(x, y, _pel_get_cur_handle());
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return;
+
+    x = handle->_centerX - x;
+    y = handle->_centerY - y;
 
     // (y - yoffset)² = r² - (x - xoffset)²
     if ((y - circle_y) * (y - circle_y) -
