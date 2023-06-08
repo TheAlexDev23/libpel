@@ -22,6 +22,17 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     if (_png_easy_read(handle->_fn, &png)) return -1;
 
+    printf("%i %i %i %i\n", start._x, start._y, end._x, end._y);
+
+    if (start._x > end._x)
+    {
+        pel_cord_t temp = start;
+        start = end;
+        end = temp;
+    }
+
+    printf("%i %i %i %i\n", start._x, start._y, end._x, end._y);
+
     int dx = end._x - start._x, dy = end._y - start._y;
     int ix = 0, iy = 0;
     if (dx > 0) ix = 1;
@@ -40,7 +51,9 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
             err -= dx;
         }
 
-        _px_set_def_color(_png_easy_px(png, x, y));
+        int rx = x, ry = y;
+        get_xy_rel_center(rx, ry, handle);
+        _px_set_def_color(_png_easy_px(png, rx, ry));
     }
     
     if (_png_easy_write(handle->_fn, png)) return -1;
