@@ -1,6 +1,8 @@
 #ifndef _PEL_HANDLE_H_INCLUDED
 #define _PEL_HANDLE_H_INCLUDED
 
+#include "pel.h"
+
 typedef struct _pel_handle {
     char* _fn;
 
@@ -9,6 +11,8 @@ typedef struct _pel_handle {
 
     int _centerX;
     int _centerY;
+
+    PEL_ERROR _err;
 } pel_handle_t;
 
 pel_handle_t* _pel_get_cur_handle();

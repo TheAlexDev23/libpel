@@ -46,11 +46,7 @@ void draw_circle_full_cb(int x, int y, png_bytep px)
 int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_draw_cb draw_cb)
 {
     pel_handle_t* handle;
-    if ((handle = _pel_get_cur_handle()) == NULL)
-    {
-        // TODO: Add error code
-        return -1;
-    }
+    if ((handle = _pel_get_cur_handle()) == NULL) return -1;
 
     png_easy_png_t png;
 
@@ -64,6 +60,7 @@ int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_dra
         _png_easy_draw(png, draw_cb) ||
         _png_easy_write(handle->_fn, png))
     {
+        handle->_err = PEL_ERR_PNG_EASY;
         return -1;
     }
 

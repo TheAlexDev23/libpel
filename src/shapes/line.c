@@ -20,7 +20,11 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     _set_color(brush_color);
 
-    if (_png_easy_read(handle->_fn, &png)) return -1;
+    if (_png_easy_read(handle->_fn, &png))
+    {
+        handle->_err = PEL_ERR_PNG_EASY;
+        return -1;
+    }
 
     // Change drawing direction if going towards left on the x axis
     if (start._x > end._x)
@@ -59,7 +63,11 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
         _px_set_def_color(_png_easy_px(png, rx, ry));
     }
     
-    if (_png_easy_write(handle->_fn, png)) return -1;
+    if (_png_easy_write(handle->_fn, png))
+    {
+        handle->_err = PEL_ERR_PNG_EASY;
+        return -1;
+    }
     
     return 0;
 }

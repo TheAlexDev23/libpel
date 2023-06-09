@@ -5,7 +5,7 @@ enable_testing()
 
 set(CMAKE_BUILD_TYPE Debug)
 
-include_directories(include)
+include_directories(include/pel)
 include_directories(src)
 
 add_library(
@@ -13,6 +13,7 @@ add_library(
     src/pel.c
     src/handle.h
     src/handle.c
+    src/error.c
     src/image.h
     src/helper/png-easy.c
     src/helper/png-easy.h
