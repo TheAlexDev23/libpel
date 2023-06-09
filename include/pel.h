@@ -8,6 +8,19 @@ typedef struct _pel_color {
     int a;
 } pel_color_t;
 
+typedef struct _pel_px {
+    int x;
+    int y;
+    pel_color_t color;
+} pel_px_t;
+
+typedef struct _pel_bitmap {
+    int height;
+    int width;
+    /* At least sizeof(pel_px_t) * heigth * width */
+    pel_px_t* bm;
+} pel_bitmap_t;
+
 #define PEL_COLOR_BLACK (pel_color_t){.r = 0, .g = 0, .b = 0, .a = 255}
 #define PEL_COLOR_WHITE (pel_color_t){.r = 255, .g = 255, .b = 255, .a = 255}
 #define PEL_COLOR_RED (pel_color_t){.r = 255, .g = 0, .b = 0, .a = 255}

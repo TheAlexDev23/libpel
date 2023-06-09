@@ -23,6 +23,14 @@ add_library(
     src/shapes/line.c
 )
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FREETYPE REQUIRED freetype2)
+
+include_directories(${TRUETYPE_INCLUDE_DIRS})
+target_compile_options(${PROJECT_NAME} PUBLIC ${TRUETYPE_CFLAGS})
+
+target_link_libraries(${PROJECT_NAME} ${TRUETYPE_LIBRARIES})
+
 target_link_libraries(${PROJECT_NAME} png)
 
 add_subdirectory(tests)
