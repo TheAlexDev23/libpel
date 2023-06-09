@@ -5,7 +5,7 @@
 #include "image.h"
 #include "pixel.h"
 #include "handle.h"
-#include "png-easy.h"
+#include "helper/png-easy.h"
 #include "state.h"
 
 int circle_r;

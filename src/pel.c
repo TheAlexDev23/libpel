@@ -4,7 +4,7 @@
 #include <png.h>
 
 #include "pel.h"
-#include "png-easy.h"
+#include "helper/png-easy.h"
 #include "handle.h"
 
 pel_color_t color;

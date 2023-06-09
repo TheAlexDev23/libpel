@@ -2,7 +2,7 @@
 
 #include "pel.h"
 
-#include "png-easy.h"
+#include "helper/png-easy.h"
 #include "state.h"
 #include "pixel.h"
 #include "image.h"

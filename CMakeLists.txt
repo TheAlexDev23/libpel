@@ -14,8 +14,8 @@ add_library(
     src/handle.h
     src/handle.c
     src/image.h
-    src/png-easy.c
-    src/png-easy.h
+    src/helper/png-easy.c
+    src/helper/png-easy.h
     src/pixel.c
     src/pixel.h
     src/state.h
