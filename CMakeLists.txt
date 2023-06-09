@@ -13,7 +13,6 @@ add_library(
     src/pel.c
     src/handle.h
     src/handle.c
-    src/image.c
     src/image.h
     src/png-easy.c
     src/png-easy.h
