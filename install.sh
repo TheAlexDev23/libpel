@@ -5,12 +5,14 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+cp pel.pc /usr/share/pkgconfig
+
 # Building
 cmake -S . -B build
 make -C build
 
 # Copying
-cp include/pel.h /usr/include
+cp -r include/pel /usr/include
 cp build/libpel.a /usr/lib
 
 echo "Install succesful"

@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.26.0)
 project(tests)
 
-include_directories(../include)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PEL REQUIRED pel)
 
-add_executable(circle circle.c)
-add_executable(line line.c)
-
-target_link_libraries(circle pel)
-target_link_libraries(line pel)
+set(tests circle line)
+foreach (element IN LISTS tests)
+    add_executable(${element} ${element}.c)
+    target_compile_options(${element} PUBLIC ${PEL_CFLAGS})
+    target_link_libraries(${element} ${PEL_LIBRARIES})
+endforeach()
