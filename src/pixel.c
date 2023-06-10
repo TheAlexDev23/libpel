@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 #include "pixel.h"
 
 pel_color_t _cur_color;
@@ -17,6 +19,11 @@ void _px_set_def_color(png_bytep px)
 
 void _px_set(png_bytep px, pel_color_t color)
 {
+    if (px == NULL)
+    {
+        return;
+    }
+
     _set_color(color);
     _px_set_def_color(px);
 }
