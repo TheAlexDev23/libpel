@@ -5,12 +5,12 @@
 #include "pel.h"
 #include "state.h"
 
-int pel_write(pel_color_t brush_color, char* font_name, char* text, pel_cord_t cords)
+int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t cords)
 {
     CHECK
 
     pel_bitmap_t bm;
-    if (_ft_easy_get_bm(font_name, 'I', &bm)) return -1;
+    if (_ft_easy_get_bm(font.font_family, font.font_style, 'I', &bm)) return -1;
 
     for (int j = 0; j < bm.height; j++)
     {

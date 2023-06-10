@@ -4,9 +4,9 @@
 #include "pel.h"
 
 /* Sets font bitmap of charcter from default location. Doesn't work too well on all platforms */
-int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap);
+int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bitmap_t* bitmap);
 
-/* Sets font bitmap of character from custom location filename */
+/* Sets font bitmap of character from custom location file_name */
 int _ft_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap);
 
 #endif

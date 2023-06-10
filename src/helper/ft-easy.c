@@ -85,7 +85,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     return 0;
 }
 
-int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
+int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bitmap_t* bitmap)
 {
     CHECK
 
@@ -100,7 +100,8 @@ int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
     }
 
     FcPattern* pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)fontname);
+    FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)font_family);
+    FcPatternAddString(pattern, FC_STYLE, (const FcChar8*)font_style);
 
     FcResult result;
     FcPattern* matchedPattern = FcFontMatch(NULL, pattern, &result);

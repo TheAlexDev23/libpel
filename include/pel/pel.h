@@ -35,7 +35,15 @@ typedef struct _pel_cord {
 
 #define PEL_CORD(x, y) (pel_cord_t){._x = x, ._y = y}
 
-/* Initializes png file */
+typedef struct _pel_font {
+    char* font_family;
+    char* font_style;
+    int size;
+} pel_font_t;
+
+#define PEL_FONT(family, style, sz) (pel_font_t){.font_family = family, .font_style = style, .size = sz}
+
+/* Initializes PEL file */
 extern int pel_init(char* filename, int height, int width);
 
 /********************************
@@ -64,6 +72,6 @@ extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t e
 /*
 * Draws text with selected font
 */
-extern int pel_write(pel_color_t brush_color, char* font_name, char* text, pel_cord_t cords);
+extern int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t cords);
 
 #endif
