@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
+#include <unistd.h>
 
 #include <png.h>
 
@@ -11,13 +11,11 @@
 pel_color_t color;
 int pel_init(char* filename, int height, int width)
 {
-    struct stat buff;
-    if (stat(filename, &buff))
+    if (access(filename, F_OK))
     {
         if (_png_easy_create_empty(filename, height, width))
             return -1;
     }
-
 
     pel_handle_t* handle = calloc(1, sizeof(pel_handle_t));
 
