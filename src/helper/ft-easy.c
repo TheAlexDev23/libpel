@@ -11,7 +11,7 @@
 #include "state.h"
 #include "pel.h"
 
-int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
+int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character)
 {
     FT_Library library;
     FT_Face face;
@@ -20,7 +20,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     pel_handle_t* handle = _pel_get_cur_handle();
 
     int err = 0;
-    err = FT_Init_FreeType( &library );
+    err = FT_Init_FreeType(&library);
     if (err) return -1;
 
     err = FT_New_Face(library,
@@ -37,6 +37,8 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
 
     FT_UInt glyph_index;
     FT_GlyphSlot slot = face->glyph;
+
+    FT_Set_Pixel_Sizes(face, size, size);
 
     /* retrieve glyph index from character code */
     glyph_index = FT_Get_Char_Index(face, character);
@@ -85,7 +87,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     return 0;
 }
 
-int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bitmap_t* bitmap)
+int _ft_easy_get_bm(pel_font_t font, char character, pel_bitmap_t* bitmap)
 {
     CHECK
 
@@ -100,8 +102,8 @@ int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bit
     }
 
     FcPattern* pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)font_family);
-    FcPatternAddString(pattern, FC_STYLE, (const FcChar8*)font_style);
+    FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)font.font_family);
+    FcPatternAddString(pattern, FC_STYLE, (const FcChar8*)font.font_style);
 
     FcResult result;
     FcPattern* matchedPattern = FcFontMatch(NULL, pattern, &result);
@@ -109,7 +111,7 @@ int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bit
     FcChar8* fontFile;
     if (FcPatternGetString(matchedPattern, FC_FILE, 0, &fontFile) == FcResultMatch)
     {
-        return get_font_base((char*)fontFile, bitmap, character);
+        return get_font_base((char*)fontFile, font.size, bitmap, character);
     }
     else
     {
@@ -120,8 +122,8 @@ int _ft_easy_get_bm(char* font_family, char* font_style, char character, pel_bit
     return 0;
 }
 
-int _ft_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)
+int _ft_easy_get_bm_loc(char* filename, int size, char character, pel_bitmap_t* bitmap)
 {
     CHECK
-    return get_font_base(filename, bitmap, character);
+    return get_font_base(filename, size, bitmap, character);
 }

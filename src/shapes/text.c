@@ -10,7 +10,7 @@ int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t c
     CHECK
 
     pel_bitmap_t bm;
-    if (_ft_easy_get_bm(font.font_family, font.font_style, 'I', &bm)) return -1;
+    if (_ft_easy_get_bm(font, 'I', &bm)) return -1;
 
     for (int j = 0; j < bm.height; j++)
     {
