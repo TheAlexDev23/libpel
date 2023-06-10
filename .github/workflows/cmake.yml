@@ -20,11 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install libraries
-      run: sudo apt-get update && sudo apt-get install libfreetype6-dev
-
     - name: Install fonts for tests
-      run: sudo apt-get install fonts-open-sans && sudo fc-cache -f -v
+      run: sudo apt-get install fonts-open-sans
 
     - name: Setup pel pkgconf
       run: cp ${{github.workspace}}/pel.pc /usr/share/pkgconfig
