@@ -6,6 +6,7 @@
 #include FT_FREETYPE_H
 
 #include "ft-easy.h"
+#include "handle.h"
 #include "pel.h"
 
 int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
@@ -22,7 +23,11 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
                      0,
                      &face);
 
-    if (err) return -1;
+    if (err)
+    {
+        _pel_get_cur_handle()->_err = PEL_ERR_FT_FONT_NOT_FOUND;
+        return -1;
+    }
 
     FT_UInt glyph_index;
     FT_GlyphSlot slot = face->glyph;
@@ -32,11 +37,19 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
 
     /* load glyph image into the slot (erase previous one) */
     err = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
-    if (err) return -1;
+    if (err)
+    {
+        _pel_get_cur_handle()->_err = PEL_ERR_FT_LOAD_GLYPH;
+        return -1;
+    }
 
     /* convert to an anti-aliased bitmap */
     err = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-    if (err) return -1;
+    if (err)
+    {
+        _pel_get_cur_handle()->_err = PEL_ERR_FT_RENDER_GLYPH;
+        return -1;
+    }
 
     FT_Bitmap bm = face->glyph->bitmap;
 

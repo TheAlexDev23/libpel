@@ -19,6 +19,12 @@ char* pel_strerr(PEL_ERROR err)
             return "Error with internal PEL libpng wrapper";
         case PEL_ERR_FT_EASY:
             return "Error with internal PEL freetype wrapper";
+        case PEL_ERR_FT_FONT_NOT_FOUND:
+            return "Internal PEL FreeType wrapper: font not found";
+        case PEL_ERR_FT_LOAD_GLYPH:
+            return "Internal PEL FreeType wrapper: could not load glyph";
+        case PEL_ERR_FT_RENDER_GLYPH:
+            return "Internal PEL FreeType wrapper: could not render glyph into pixel data";
         default:
             return "Unkown error";
     }
