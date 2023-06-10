@@ -27,6 +27,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
 
     if (err)
     {
+        FT_Done_FreeType(library);
         _pel_get_cur_handle()->_err = PEL_ERR_FT_FONT_NOT_FOUND;
         return -1;
     }
@@ -41,6 +42,8 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     err = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
     if (err)
     {
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
         _pel_get_cur_handle()->_err = PEL_ERR_FT_LOAD_GLYPH;
         return -1;
     }
@@ -49,6 +52,8 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     err = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
     if (err)
     {
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
         _pel_get_cur_handle()->_err = PEL_ERR_FT_RENDER_GLYPH;
         return -1;
     }
@@ -70,6 +75,9 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
             bitmap->bm[j * width + i] = (pel_color_t){.r = 0, .g = 0, .b = 0, .a = px};
         }
     }
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(library);
 
     return 0;
 }
