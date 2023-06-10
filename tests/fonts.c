@@ -7,14 +7,14 @@ int main()
 {
     system("mkdir fonts");
     int err = 0;
-    err = pel_init("fonts/text1.png", 100, 100);
+    err = pel_init("fonts/text1.png", 500, 300);
     if (err)
     {
         fprintf(stderr, "ERROR (1): %s\n", pel_strerrno());
         return -1;
     }
 
-    err = pel_write(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Regular", 64), "I", PEL_CORD(0, 0));
+    err = pel_write(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), "Hello", PEL_CORD(500/2 - 50, 300 / 2));
 
     if (err)
     {
