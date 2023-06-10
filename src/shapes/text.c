@@ -8,7 +8,7 @@
 #include "state.h"
 #include "pixel.h"
 
-int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t cords)
+int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offset, char* text, pel_cord_t cords)
 {
     CHECK
 
@@ -27,6 +27,13 @@ int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t c
     {
         pel_bitmap_t bm;
         if (_ft_easy_get_bm(font, text[n], &bm)) return -1;
+
+        /* Go to next line if next character wont fit */
+        if (offx + bm.width >= width)
+        {
+            offx = cords._x;
+            offy += line_offset;
+        }
 
         /* Drawing rom reverse allows to allign characters fonts to the bottom rather than to the top */
         for (int j = 0; j < bm.height; j++)

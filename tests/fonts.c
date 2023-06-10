@@ -14,7 +14,7 @@ int main()
         return -1;
     }
 
-    err = pel_write(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), "Hello", PEL_CORD(500/2 - 50, 300 / 2));
+    err = pel_write(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), 300, 30, "Hello", PEL_CORD(500/2 - 50, 300 / 2));
 
     if (err)
     {

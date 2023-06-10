@@ -70,8 +70,8 @@ extern int pel_draw_circle_full(pel_color_t brush_color, pel_cord_t cords, int r
 extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end);
 
 /*
-* Draws text with selected font
+* Draws text with selected font. With defines the point when should go next line.
 */
-extern int pel_write(pel_color_t brush_color, pel_font_t font, char* text, pel_cord_t cords);
+extern int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offset, char* text, pel_cord_t cords);
 
 #endif
