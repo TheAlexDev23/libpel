@@ -44,7 +44,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     {
         FT_Done_Face(face);
         FT_Done_FreeType(library);
-        _pel_get_cur_handle()->_err = PEL_ERR_FT_LOAD_GLYPH;
+        handle->_err = PEL_ERR_FT_LOAD_GLYPH;
         return -1;
     }
 
@@ -54,7 +54,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     {
         FT_Done_Face(face);
         FT_Done_FreeType(library);
-        _pel_get_cur_handle()->_err = PEL_ERR_FT_RENDER_GLYPH;
+        handle->_err = PEL_ERR_FT_RENDER_GLYPH;
         return -1;
     }
 
