@@ -34,6 +34,10 @@ target_link_libraries(${PROJECT_NAME} ${TRUETYPE_LIBRARIES})
 
 target_link_libraries(${PROJECT_NAME} png)
 
+
+include(tests/tests.cmake)
 add_subdirectory(tests)
-add_test(NAME Circle COMMAND tests/circle)
-add_test(NAME Line COMMAND tests/line)
+
+foreach (element IN LISTS tests)
+    add_test(NAME ${element} COMMAND tests/${element})
+endforeach()
