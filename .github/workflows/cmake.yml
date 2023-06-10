@@ -20,8 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-		- name: Install fonts for tests
-			run: sudo apt install fonts-open-sans && fc-cache -f -v
+    - name: Install fonts for tests
+      run: sudo apt install fonts-open-sans && fc-cache -f -v
 
     - name: Setup pel pkgconf
       run: cp ${{github.workspace}}/pel.pc /usr/share/pkgconfig
