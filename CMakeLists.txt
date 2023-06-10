@@ -35,7 +35,6 @@ target_compile_options(${PROJECT_NAME} PUBLIC ${FREETYPE_CFLAGS})
 
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES} png fontconfig)
 
-
 include(tests/tests.cmake)
 add_subdirectory(tests)
 
