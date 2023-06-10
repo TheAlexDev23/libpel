@@ -25,6 +25,8 @@ char* pel_strerr(PEL_ERROR err)
             return "Internal PEL FreeType wrapper: could not load glyph";
         case PEL_ERR_FT_RENDER_GLYPH:
             return "Internal PEL FreeType wrapper: could not render glyph into pixel data";
+        case PEL_SUCCESS:
+            return "No errors";
         default:
             return "Unkown error";
     }

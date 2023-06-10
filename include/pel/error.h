@@ -3,6 +3,7 @@
 
 typedef int PEL_ERROR;
 
+#define PEL_SUCCESS 0
 #define PEL_ERR_UNKOWN -1
 #define PEL_ERR_HANDLE_NULL 1
 /* PNG related errors */

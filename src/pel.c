@@ -18,6 +18,7 @@ int pel_init(char* filename, int height, int width)
     }
 
     pel_handle_t* handle = calloc(1, sizeof(pel_handle_t));
+    handle->_err = PEL_SUCCESS;
 
     handle->_fn = malloc(strlen(filename) + 1);
     strcpy(handle->_fn, filename),
