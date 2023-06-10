@@ -86,27 +86,25 @@ int _tt_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
         "/usr/X11R6/lib/X11/fonts/" //RHL
     };
 
+    pel_handle_t* handle = _pel_get_cur_handle();
+
     for (int i = 0; i < POSSIBLE_LOCATIONS_AMOUNT; i++)
     {
         char* loc = possible_locations[i];
         char filename[strlen(loc) + strlen(fontname)];
         sprintf(filename, "%s%s", loc, fontname);
-        if (get_font_base(filename, bitmap, character))
+        int err = get_font_base(filename, bitmap, character);
+
+        if (err)
         {
-            if (_pel_get_cur_handle()->_err == PEL_ERR_FT_FONT_NOT_FOUND)
-            {
-                continue;
-            }
-            else
-            {
-                return -1;
-            }
+            if (handle->_err == PEL_ERR_FT_FONT_NOT_FOUND) continue;
+            return -1;
         }
-        else
-        {
-            return 0;
-        }
+
+        return 0;
     }
+
+    return -1;
 }
 
 int _tt_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)
