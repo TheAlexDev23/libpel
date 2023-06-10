@@ -1,10 +1,13 @@
 # PEL: Photo Editing Library
 
-C library that allows png manipulation and image editing. Written for a school project, altough I might continue development.
+C library that allows png manipulation and image editing. Originally written for a school project.
 
 ## Installation
 
-Will build and add pel.h to /usr/include and libpel.a to /usr/lib therefore requires root privilieges
+`install.sh` adds the pkgconf file of libpel to the system, configures the project and builts it.
+After building, copies header and binaries into /usr/include/pel and /usr/bin.
+Requires to be run with root privilegies.
+
 ```bash
 git clone https://github.com/TheAlexDev23/libpel
 cd libpel
@@ -14,10 +17,8 @@ sudo ./install.sh
 
 ## Testing
 
-Assuming in project directory
+Assuming in project directory and already compiled/built the project
 ```bash
-cmake -S . -B build
 cd build
-make
-ctest
+ctest --output-on-failure
 ```
