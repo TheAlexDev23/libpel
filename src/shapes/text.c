@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "helper/tt-easy.h"
+#include "helper/ft-easy.h"
 
 #include "pel.h"
 

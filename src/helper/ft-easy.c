@@ -5,7 +5,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "tt-easy.h"
+#include "ft-easy.h"
 #include "pel.h"
 
 int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
