@@ -14,7 +14,7 @@ int main()
         return -1;
     }
 
-    printf("PEL handled error correctly returning: %s\n", pel_sterrno());
+    printf("PEL handled error correctly returning: %s\n", pel_strerrno());
 
     return 0;
 }

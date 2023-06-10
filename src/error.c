@@ -4,7 +4,7 @@
 
 #include "handle.h"
 
-char* pel_sterrno()
+char* pel_strerrno()
 {
     return pel_strerr(pel_errno());
 }
@@ -17,6 +17,8 @@ char* pel_strerr(PEL_ERROR err)
             return "PEL internal handle is NULL. Make sure to initialize before use";
         case PEL_ERR_PNG_EASY:
             return "Error with internal PEL libpng wrapper";
+        case PEL_ERR_TT_EASY:
+            return "Error with internal PEL truetype wrapper";
         default:
             return "Unkown error";
     }
