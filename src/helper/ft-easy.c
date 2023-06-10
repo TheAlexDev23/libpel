@@ -7,6 +7,7 @@
 
 #include "ft-easy.h"
 #include "handle.h"
+#include "state.h"
 #include "pel.h"
 
 int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
@@ -72,14 +73,44 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     return 0;
 }
 
+#define POSSIBLE_LOCATIONS_AMOUNT 6
 int _tt_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
 {
-    char filename[strlen("/usr/share/fonts/TTF/") + strlen(fontname)];
-    sprintf(filename, "/usr/share/fonts/TTF/%s", fontname);
-    return get_font_base(filename, bitmap, character);
+    CHECK
+    char* possible_locations[POSSIBLE_LOCATIONS_AMOUNT] = {
+        "~/.fonts",
+        "/usr/share/fonts/TTF/",
+        "/usr/share/fonts/",
+        "/usr/share/fonts/freetype/",
+        "/usr/X11R6/lib/X11/fonts/ttfonts/", // RHL
+        "/usr/X11R6/lib/X11/fonts/" //RHL
+    };
+
+    for (int i = 0; i < POSSIBLE_LOCATIONS_AMOUNT; i++)
+    {
+        char* loc = possible_locations[i];
+        char filename[strlen(loc) + strlen(fontname)];
+        sprintf(filename, "%s%s", loc, fontname);
+        if (get_font_base(filename, bitmap, character))
+        {
+            if (_pel_get_cur_handle()->_err == PEL_ERR_FT_FONT_NOT_FOUND)
+            {
+                continue;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }
 
 int _tt_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)
 {
+    CHECK
     return get_font_base(filename, bitmap, character);
 }
