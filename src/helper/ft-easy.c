@@ -16,6 +16,9 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     FT_Library library;
     FT_Face face;
 
+    // At this point it should be already checked for null before
+    pel_handle_t* handle = _pel_get_cur_handle();
+
     int err = 0;
     err = FT_Init_FreeType( &library );
     if (err) return -1;
@@ -28,7 +31,7 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     if (err)
     {
         FT_Done_FreeType(library);
-        _pel_get_cur_handle()->_err = PEL_ERR_FT_FONT_NOT_FOUND;
+        handle->_err = PEL_ERR_FT_FONT_NOT_FOUND;
         return -1;
     }
 
