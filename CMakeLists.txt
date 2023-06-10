@@ -33,9 +33,7 @@ pkg_check_modules(FREETYPE REQUIRED freetype2)
 include_directories(${FREETYPE_INCLUDE_DIRS})
 target_compile_options(${PROJECT_NAME} PUBLIC ${FREETYPE_CFLAGS})
 
-target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
-
-target_link_libraries(${PROJECT_NAME} png)
+target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES} png fontconfig)
 
 
 include(tests/tests.cmake)

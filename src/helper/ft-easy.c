@@ -4,6 +4,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <fontconfig/fontconfig.h>
 
 #include "ft-easy.h"
 #include "handle.h"
@@ -77,34 +78,35 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
 int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
 {
     CHECK
-    char* possible_locations[POSSIBLE_LOCATIONS_AMOUNT] = {
-        "~/.fonts/",
-        "/usr/share/fonts/TTF/",
-        "/usr/share/fonts/truetype/",
-        "/usr/share/fonts/freetype/",
-        "/usr/X11R6/lib/X11/fonts/ttfonts/", // RHL
-        "/usr/X11R6/lib/X11/fonts/" //RHL
-    };
 
     pel_handle_t* handle = _pel_get_cur_handle();
 
-    for (int i = 0; i < POSSIBLE_LOCATIONS_AMOUNT; i++)
+    /* Finding font location in a platform independent way */
+    FcBool success = FcInit();
+    if (!success)
     {
-        char* loc = possible_locations[i];
-        char filename[strlen(loc) + strlen(fontname)];
-        sprintf(filename, "%s%s", loc, fontname);
-        int err = get_font_base(filename, bitmap, character);
-
-        if (err)
-        {
-            if (handle->_err == PEL_ERR_FT_FONT_NOT_FOUND) continue;
-            return -1;
-        }
-
-        return 0;
+        handle->_err = PEL_ERR_FT_EASY;
+        return -1;
     }
 
-    return -1;
+    FcPattern* pattern = FcPatternCreate();
+    FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)fontname);
+
+    FcResult result;
+    FcPattern* matchedPattern = FcFontMatch(NULL, pattern, &result);
+
+    FcChar8* fontFile;
+    if (FcPatternGetString(matchedPattern, FC_FILE, 0, &fontFile) == FcResultMatch)
+    {
+        return get_font_base((char*)fontFile, bitmap, character);
+    }
+    else
+    {
+        handle->_err = PEL_ERR_FT_FONT_NOT_FOUND;
+        return -1;
+    }
+
+    return 0;
 }
 
 int _ft_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)

@@ -14,12 +14,7 @@ int main()
         return -1;
     }
 
-    err = pel_write(PEL_COLOR_BLACK, "/usr/share/fonts/TTF/OpenSans-Regular.ttf", "I", PEL_CORD(0, 0));
-    if (err)
-    {
-        // Ubuntu
-        err = pel_write(PEL_COLOR_BLACK, "/usr/share/fonts/truetype/open-sans/OpenSans-Regular.ttf", "I", PEL_CORD(0, 0));
-    }
+    err = pel_write(PEL_COLOR_BLACK, "OpenSans-Regular", "I", PEL_CORD(0, 0));
 
     if (err)
     {
