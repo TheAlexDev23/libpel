@@ -28,12 +28,29 @@ add_library(
 )
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(FREETYPE REQUIRED freetype2)
 
-include_directories(${FREETYPE_INCLUDE_DIRS})
-target_compile_options(${PROJECT_NAME} PUBLIC ${FREETYPE_CFLAGS})
+set(pkgs freetype2 fontconfig)
+set(pkg_names FREETYPE FONTCONFIG)
+set(idx 0)
 
-target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES} png fontconfig)
+foreach (PACKAGE IN LISTS pkgs)
+    list(GET pkg_names ${idx} PKG)
+    pkg_check_modules(${PKG} REQUIRED ${PACKAGE})
+    foreach (DIR IN LISTS ${PKG}_INCLUDE_DIRS)
+        include_directories(${DIR})
+    endforeach()
+
+    foreach (FLAG IN LISTS ${PKG}_CFLAGS)
+        target_compile_options(${PROJECT_NAME} PUBLIC ${FLAG})
+    endforeach()
+
+    string(TOLOWER "${PKG}" PKG)
+    target_link_libraries(${PROJECT_NAME} ${PKG})
+
+    math(EXPR idx "${idx} + 1")
+endforeach()
+
+target_link_libraries(${PROJECT_NAME} png)
 
 include(tests/tests.cmake)
 add_subdirectory(tests)
