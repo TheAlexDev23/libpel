@@ -19,10 +19,8 @@ typedef struct _pel_px {
 typedef struct _pel_bitmap {
     int height;
     int width;
-    /* At least sizeof(pel_px_t) * heigth * width */
-    pel_px_t* bm;
+    pel_color_t* bm;
 } pel_bitmap_t;
-
 
 #define PEL_COLOR_BLACK (pel_color_t){.r = 0, .g = 0, .b = 0, .a = 255}
 #define PEL_COLOR_WHITE (pel_color_t){.r = 255, .g = 255, .b = 255, .a = 255}
@@ -62,5 +60,10 @@ extern int pel_draw_circle_full(pel_color_t brush_color, pel_cord_t cords, int r
 * Draws line from point start to point end
 */
 extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end);
+
+/*
+* Draws text with selected font
+*/
+extern int pel_write(pel_color_t brush_color, char* text, pel_cord_t cords);
 
 #endif

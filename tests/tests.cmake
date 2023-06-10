@@ -1,1 +1,1 @@
-set(tests circle line errors)
+set(tests circle line errors fonts)
