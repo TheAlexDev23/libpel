@@ -74,13 +74,13 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
 }
 
 #define POSSIBLE_LOCATIONS_AMOUNT 6
-int _tt_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
+int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
 {
     CHECK
     char* possible_locations[POSSIBLE_LOCATIONS_AMOUNT] = {
-        "~/.fonts",
+        "~/.fonts/",
         "/usr/share/fonts/TTF/",
-        "/usr/share/fonts/",
+        "/usr/share/fonts/truetype/",
         "/usr/share/fonts/freetype/",
         "/usr/X11R6/lib/X11/fonts/ttfonts/", // RHL
         "/usr/X11R6/lib/X11/fonts/" //RHL
@@ -107,7 +107,7 @@ int _tt_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
     return -1;
 }
 
-int _tt_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)
+int _ft_easy_get_bm_loc(char* filename, char character, pel_bitmap_t* bitmap)
 {
     CHECK
     return get_font_base(filename, bitmap, character);

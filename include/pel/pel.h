@@ -64,6 +64,6 @@ extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t e
 /*
 * Draws text with selected font
 */
-extern int pel_write(pel_color_t brush_color, char* text, pel_cord_t cords);
+extern int pel_write(pel_color_t brush_color, char* font_location ,char* text, pel_cord_t cords);
 
 #endif
