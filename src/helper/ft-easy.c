@@ -85,7 +85,6 @@ int get_font_base(char* filename, pel_bitmap_t* bitmap, char character)
     return 0;
 }
 
-#define POSSIBLE_LOCATIONS_AMOUNT 6
 int _ft_easy_get_bm(char* fontname, char character, pel_bitmap_t* bitmap)
 {
     CHECK
