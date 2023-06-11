@@ -3,7 +3,7 @@
 
 #include "pel.h"
 
-/* Sets font bitmap of charcter from default location. Doesn't work too well on all platforms */
+/* Gets font bitmap platform-independently */
 int _ft_easy_get_bm(pel_font_t font, char character, pel_bitmap_t* bitmap);
 
 /* Sets font bitmap of character from custom location file_name */
