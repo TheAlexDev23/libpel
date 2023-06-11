@@ -19,7 +19,7 @@ sudo ./install.sh
 ```
 
 ## Using library
-If running the default install script, a pkgconf file should have been created. You can build your project and add this library by adding the output of `pkgconf pel --libs -cflags` to the compile options of your prject.
+If running the default install script, a pkgconf file should have been created. You can build your project and add this library by adding the output of `pkgconf pel --libs -cflags` to the compile options of your project.
 
 Example
 ```bash
@@ -72,8 +72,7 @@ int main()
 }
 ```
 
-The [tests folder](/tests/) has a series of tests used in development to test the functionality of the library. They are good examples of all the functionaity of libpel.
+The [tests folder](/tests/) has a series of tests used in development to test the functionality of the library. They are good examples of the functionaity and API of PEL.
 
 ## Documentation
-Comming soon. I'm currrently only focusing on just the development but I'll probably add API and internal (structure realated, useful for development) documentation after I finish the base functionality.
-
+Comming soon. I'm currrently only focusing on just the development but I'll probably add API and internal (structure relaated, useful for development) documentation after I finish the base functionality.
