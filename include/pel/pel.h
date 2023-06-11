@@ -41,11 +41,17 @@ typedef struct _pel_font {
 
 #define PEL_FONT(family, style, sz) (pel_font_t){.font_family = family, .font_style = style, .size = sz}
 
+typedef enum _pel_text_align {
+    PEL_TEXT_ALIGN_CENTER,
+    PEL_TEXT_ALIGN_START, 
+    PEL_TEXT_ALIGN_END
+} pel_text_align_t;
+
 /* Initializes PEL */
 extern int pel_init(char* filename, pel_image_source_type_t image_type);
 
 /* Creates/overwrites filename and initializes pel as normal */
-extern int pel_init_create(char* filename, pel_image_source_type_t image_type, int height, int width);
+extern int pel_init_create(char* filename, pel_image_source_type_t image_type, int width, int height);
 
 /* Closes pel and saves modifications */
 extern int pel_save();
@@ -74,8 +80,8 @@ extern int pel_draw_circle_full(pel_color_t brush_color, pel_cord_t cords, int r
 extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end);
 
 /*
-* Draws text with selected font. With defines the point when should go next line.
+* Draws text with selected font. With defines the point when should go next line, line_offset is the separation betweeen lines.
 */
-extern int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offset, char* text, pel_cord_t cords);
+extern int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, int line_offset, pel_text_align_t align, char* text, pel_cord_t cords);
 
 #endif

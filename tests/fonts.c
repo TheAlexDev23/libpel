@@ -13,7 +13,9 @@ int main()
         return -1;
     }
 
-    if (pel_write(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), 300, 30, "Hello", PEL_CORD(500/2 - 50, 300 / 2)))
+    if (pel_draw_textbox(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), 400, 30, PEL_TEXT_ALIGN_END, "End", PEL_CORD(0, 0)) || 
+        pel_draw_textbox(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), 250, 30, PEL_TEXT_ALIGN_CENTER, "Center", PEL_CORD(0, 0)) || 
+        pel_draw_textbox(PEL_COLOR_BLACK, PEL_FONT("OpenSans", "Italic", 50), 400, 30, PEL_TEXT_ALIGN_START, "Start", PEL_CORD(0, 0)))
     {
         fprintf(stderr, "Error during write: %s\n", pel_strerrno());
         return -1;
