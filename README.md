@@ -52,6 +52,8 @@ int main()
         return -1;
     }
 
+    pel_save(); // Necessary when finished editing or about to start editing another file. Not calling will result in loss of data.
+
     if (pel_init("circles/circle-full.png", PEL_IMG_SOURCE_PNG, 100, 100))
     {
         fprintf(stderr, "ERROR: failed init %s\n", pel_strerrno());
@@ -63,6 +65,8 @@ int main()
         fprintf(stderr, "ERROR: failed draw circle full %s\n", pel_strerrno());
         return -1;
     }
+
+    pel_save();
 
     return 0;
 }
