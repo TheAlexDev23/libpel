@@ -76,7 +76,7 @@ int _image_read()
     return 0;
 }
 
-int _image_create_empty(char* filename, pel_image_source_type_t image_type, int height, int width)
+int _image_create_empty(char* filename, pel_image_source_type_t image_type, int width, int height)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
@@ -84,7 +84,7 @@ int _image_create_empty(char* filename, pel_image_source_type_t image_type, int 
     switch (image_type)
     {
         case PEL_IMG_SOURCE_PNG: ;
-            if (_png_easy_create_empty(filename, height, width))
+            if (_png_easy_create_empty(filename, width, height))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
                 return -1;

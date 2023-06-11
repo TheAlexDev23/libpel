@@ -22,7 +22,7 @@ typedef struct _pel_image {
 typedef void (*_pel_image_draw_cb_t)(int x, int y, pel_color_t px);
 
 /* Create empty image */
-int _image_create_empty(char* filename, pel_image_source_type_t image_type, int height, int width);
+int _image_create_empty(char* filename, pel_image_source_type_t image_type, int width, int height);
 
 /* Load image data into current handle */
 int _image_read();
