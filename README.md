@@ -72,7 +72,7 @@ int main()
 }
 ```
 
-The [tests folder](/tests/) has a series of tests to test the functionality of the library. They are good examples of all the functionaity of libpel.
+The [tests folder](/tests/) has a series of tests used in development to test the functionality of the library. They are good examples of all the functionaity of libpel.
 
 ## Documentation
 Comming soon. I'm currrently only focusing on just the development but I'll probably add API and internal (structure realated, useful for development) documentation after I finish the base functionality.
