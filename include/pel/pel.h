@@ -41,8 +41,14 @@ typedef struct _pel_font {
 
 #define PEL_FONT(family, style, sz) (pel_font_t){.font_family = family, .font_style = style, .size = sz}
 
-/* Initializes PEL file */
-extern int pel_init(char* filename, pel_image_source_type_t image_type, int height, int width);
+/* Initializes PEL */
+extern int pel_init(char* filename, pel_image_source_type_t image_type);
+
+/* Creates/overwrites filename and initializes pel as normal */
+extern int pel_init_create(char* filename, pel_image_source_type_t image_type, int height, int width);
+
+/* Closes pel and saves modifications */
+extern int pel_save();
 
 /********************************
  * 

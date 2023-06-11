@@ -64,6 +64,9 @@ int _image_read()
 
             handle->_img = png_to_pel(*png);
             handle->_img.image_structure = png;
+
+            handle->_width = png->width;
+            handle->_height = png->height;
             break;
         default:
             handle->_err = PEL_ERR_UNKOWN;
@@ -73,16 +76,12 @@ int _image_read()
     return 0;
 }
 
-int _image_create_empty()
+int _image_create_empty(char* filename, pel_image_source_type_t image_type, int height, int width)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
-    char* filename = handle->_fn;
-    int height = handle->_height;
-    int width = handle->_width;
-
-    switch (handle->_image_source_type)
+    switch (image_type)
     {
         case PEL_IMG_SOURCE_PNG:
             if (_png_easy_create_empty(filename, height, width))

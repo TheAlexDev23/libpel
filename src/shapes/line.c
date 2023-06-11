@@ -16,11 +16,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
         end._y >= handle->_height)
         return -1;
 
-    png_easy_png_t png;
-
     _set_color(brush_color);
-
-    if (_image_read()) return -1;
 
     // Change drawing direction if going towards left on the x axis
     if (start._x > end._x)
@@ -58,8 +54,6 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
         get_xy_rel_img_center(rx, ry, handle);
         _px_set_def_color(rx, ry);
     }
-    
-    if (_image_write()) return -1;
     
     return 0;
 }

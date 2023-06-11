@@ -58,9 +58,7 @@ int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _pel_image_dr
 
     _set_color(brush_color);
 
-    if (_image_read()||
-        _image_draw(draw_cb) ||
-        _image_write())
+    if (_image_draw(draw_cb))
     {
         handle->_err = PEL_ERR_PNG_EASY;
         return -1;

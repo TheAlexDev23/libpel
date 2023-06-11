@@ -7,7 +7,7 @@ int main()
 {
     system("mkdir fonts");
     int err = 0;
-    err = pel_init("fonts/text1.png", PEL_IMG_SOURCE_PNG, 500, 300);
+    err = pel_init_create("fonts/text1.png", PEL_IMG_SOURCE_PNG, 500, 300);
     if (err)
     {
         fprintf(stderr, "ERROR (1): %s\n", pel_strerrno());
@@ -21,6 +21,8 @@ int main()
         fprintf(stderr, "ERROR (2): %s\n", pel_strerrno());
         return -1;
     }
+
+    pel_save();
 
     return 0;
 }

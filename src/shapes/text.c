@@ -16,11 +16,6 @@ int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offs
     pel_handle_t* handle = _pel_get_cur_handle();
 
     png_easy_png_t png;
-    if (_image_read())
-    {
-        handle->_err = PEL_ERR_PNG_EASY;
-        return -1;
-    }
 
     int offy = cords._y, offx = cords._x;
 
@@ -51,12 +46,6 @@ int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offs
         }
 
         offx += bm.width;
-    }
-
-    if (_image_write())
-    {
-        handle->_err = PEL_ERR_PNG_EASY;
-        return -1;
     }
 
     return 0;
