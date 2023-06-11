@@ -6,6 +6,6 @@ libdir=${exec_prefix}/lib
 Name: libpel
 Description: Photo Editing Libary
 Requires: freetype2 fontconfig libpng
-Version: 1.2
+Version: 1.3
 Cflags: -I${includedir}/pel
 Libs: -L${libdir} -lpel
