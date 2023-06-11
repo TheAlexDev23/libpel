@@ -2,9 +2,13 @@
 #define _PEL_HANDLE_H_INCLUDED
 
 #include "pel.h"
+#include "image.h"
 
 typedef struct _pel_handle {
     char* _fn;
+    
+    pel_image_source_type_t _image_source_type;
+    pel_image_t _img;
 
     int _width;
     int _height;

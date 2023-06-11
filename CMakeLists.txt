@@ -15,6 +15,7 @@ add_library(
     src/handle.c
     src/error.c
     src/image.h
+    src/image.c
     src/helper/png-easy.c
     src/helper/png-easy.h
     src/helper/ft-easy.c

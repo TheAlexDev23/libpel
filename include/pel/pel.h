@@ -3,18 +3,16 @@
 
 #include "error.h"
 
+typedef enum _pel_image_source_type {
+    PEL_IMG_SOURCE_PNG
+} pel_image_source_type_t;
+
 typedef struct _pel_color {
     int r;
     int g;
     int b;
     int a;
 } pel_color_t;
-
-typedef struct _pel_px {
-    int x;
-    int y;
-    pel_color_t color;
-} pel_px_t;
 
 typedef struct _pel_bitmap {
     int height;
@@ -44,7 +42,7 @@ typedef struct _pel_font {
 #define PEL_FONT(family, style, sz) (pel_font_t){.font_family = family, .font_style = style, .size = sz}
 
 /* Initializes PEL file */
-extern int pel_init(char* filename, int height, int width);
+extern int pel_init(char* filename, pel_image_source_type_t image_type, int height, int width);
 
 /********************************
  * 

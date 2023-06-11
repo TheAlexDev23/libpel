@@ -7,6 +7,7 @@
 #include "pel.h"
 #include "state.h"
 #include "pixel.h"
+#include "image.h"
 
 int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offset, char* text, pel_cord_t cords)
 {
@@ -15,7 +16,7 @@ int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offs
     pel_handle_t* handle = _pel_get_cur_handle();
 
     png_easy_png_t png;
-    if (_png_easy_read(handle->_fn, &png))
+    if (_image_read())
     {
         handle->_err = PEL_ERR_PNG_EASY;
         return -1;
@@ -45,14 +46,14 @@ int pel_write(pel_color_t brush_color, pel_font_t font, int width, int line_offs
                 int x = offx + i;
                 int y = offy - j;
 
-                _px_set(_png_easy_px(png, x, y), brush_color);
+                _px_set(x, y, brush_color);
             }
         }
 
         offx += bm.width;
     }
 
-    if (_png_easy_write(handle->_fn, png))
+    if (_image_write())
     {
         handle->_err = PEL_ERR_PNG_EASY;
         return -1;

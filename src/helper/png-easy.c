@@ -186,10 +186,9 @@ int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb)
 {
     for (int y = 0; y < png.height; y++)
     {
-        png_bytep row = png.row_pointers[y];
         for (int x = 0; x < png.width; x++)
         {
-            png_bytep px = &(row[x * 4]);
+            png_bytep px = _png_easy_px(png, x, y);
             draw_cb(x, y, px);
         }
     }

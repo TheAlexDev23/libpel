@@ -70,7 +70,7 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
     bitmap->height = height;
     bitmap->width = width;
 
-    bitmap->bm = (pel_color_t*)calloc(height * width, sizeof(pel_px_t));
+    bitmap->bm = (pel_color_t*)calloc(height * width, sizeof(pel_color_t));
 
     for (int j = 0; j < height; j++)
     {

@@ -12,38 +12,40 @@ int circle_r;
 int circle_x;
 int circle_y;
 
-void draw_circle_cb(int x, int y, png_bytep px)
+void draw_circle_cb(int x, int y, pel_color_t px)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return;
 
-    get_xy_rel_grid_center(x, y, handle);
+    int rx = x, ry = y;
+    get_xy_rel_grid_center(rx, ry, handle);
 
     // (y - yoffset)² = r² - (x - xoffset)²
-    if (((y - circle_y) * (y - circle_y)) -
-        (circle_r * circle_r - (x - circle_x) * (x - circle_x)) < circle_r &&
-        ((y - circle_y) * (y - circle_y)) -
-        (circle_r * circle_r - (x - circle_x) * (x - circle_x)) > -1 * circle_r)
+    if (((ry - circle_y) * (ry - circle_y)) -
+        (circle_r * circle_r - (rx - circle_x) * (rx - circle_x)) < circle_r &&
+        ((ry - circle_y) * (ry - circle_y)) -
+        (circle_r * circle_r - (rx - circle_x) * (rx - circle_x)) > -1 * circle_r)
     {
-        _px_set_def_color(px);
+        _px_set_def_color(x, y);
     }
 }
 
-void draw_circle_full_cb(int x, int y, png_bytep px)
+void draw_circle_full_cb(int x, int y, pel_color_t px)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return;
 
-    get_xy_rel_grid_center(x, y, handle);
+    int rx = x, ry = y;
+    get_xy_rel_grid_center(rx, ry, handle);
     // (y - yoffset)² = r² - (x - xoffset)²
-    if ((y - circle_y) * (y - circle_y) -
-        (circle_r * circle_r - (x - circle_x) * (x - circle_x)) < circle_r)
+    if ((ry - circle_y) * (ry - circle_y) -
+        (circle_r * circle_r - (rx - circle_x) * (rx - circle_x)) < circle_r)
     {
-        _px_set_def_color(px);
+        _px_set_def_color(x, y);
     }
 }
 
-int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_draw_cb draw_cb)
+int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _pel_image_draw_cb_t draw_cb)
 {
     pel_handle_t* handle;
     if ((handle = _pel_get_cur_handle()) == NULL) return -1;
@@ -56,9 +58,9 @@ int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _png_easy_dra
 
     _set_color(brush_color);
 
-    if (_png_easy_read(handle->_fn, &png) ||
-        _png_easy_draw(png, draw_cb) ||
-        _png_easy_write(handle->_fn, png))
+    if (_image_read()||
+        _image_draw(draw_cb) ||
+        _image_write())
     {
         handle->_err = PEL_ERR_PNG_EASY;
         return -1;
