@@ -54,7 +54,7 @@ int _image_read()
 
     switch(handle->_image_source_type)
     {
-        case PEL_IMG_SOURCE_PNG:
+        case PEL_IMG_SOURCE_PNG: ;
             png_easy_png_t* png = malloc(sizeof(png_easy_png_t));
             if (_png_easy_read(handle->_fn, png))
             {
@@ -83,7 +83,7 @@ int _image_create_empty(char* filename, pel_image_source_type_t image_type, int 
 
     switch (image_type)
     {
-        case PEL_IMG_SOURCE_PNG:
+        case PEL_IMG_SOURCE_PNG: ;
             if (_png_easy_create_empty(filename, height, width))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
@@ -114,7 +114,7 @@ int _image_draw(_pel_image_draw_cb_t draw_cb)
 
     switch (handle->_image_source_type)
     {
-        case PEL_IMG_SOURCE_PNG:
+        case PEL_IMG_SOURCE_PNG: ;
             if (_png_easy_draw(png_from_handle(handle), image_png_draw_cb))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
@@ -137,7 +137,7 @@ int _image_write()
 
     switch (handle->_image_source_type)
     {
-        case PEL_IMG_SOURCE_PNG:
+        case PEL_IMG_SOURCE_PNG: ;
             if (_png_easy_write(handle->_fn, png_from_handle(handle)))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
@@ -159,7 +159,7 @@ int _px_set_def_color(int x, int y)
 
     switch (handle->_image_source_type)
     {
-        case PEL_IMG_SOURCE_PNG:
+        case PEL_IMG_SOURCE_PNG: ;
             _png_px_set_def_color(_png_easy_px(png_from_handle(handle), x, y));
             break;
         default:
