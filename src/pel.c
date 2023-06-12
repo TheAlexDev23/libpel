@@ -9,7 +9,7 @@
 #include "handle.h"
 #include "image.h"
 
-extern int pel_init_create(char* filename, pel_image_source_type_t image_type, int width, int height)
+int pel_init_create(char* filename, pel_image_source_type_t image_type, int width, int height)
 {
     pel_handle_t* handle = calloc(1, sizeof(pel_handle_t));
     if (handle == NULL) return -1;
@@ -36,7 +36,7 @@ extern int pel_init_create(char* filename, pel_image_source_type_t image_type, i
     return 0;
 }
 
-extern int pel_init(char* filename, pel_image_source_type_t image_type)
+int pel_init(char* filename, pel_image_source_type_t image_type)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     /* This function can be called when handle is already initialized */
