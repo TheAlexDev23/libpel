@@ -26,12 +26,13 @@ add_library(
     src/shapes/circle.c
     src/shapes/line.c
     src/shapes/text.c
+    src/shapes/triangle.c
 )
 
 find_package(PkgConfig REQUIRED)
 
-set(pkgs freetype2 fontconfig)
-set(pkg_names FREETYPE FONTCONFIG)
+set(pkgs freetype2 fontconfig libpng)
+set(pkg_names FREETYPE FONTCONFIG PNG)
 set(idx 0)
 
 foreach (PACKAGE IN LISTS pkgs)
@@ -50,8 +51,6 @@ foreach (PACKAGE IN LISTS pkgs)
 
     math(EXPR idx "${idx} + 1")
 endforeach()
-
-target_link_libraries(${PROJECT_NAME} png)
 
 target_link_libraries(${PROJECT_NAME} m)
 

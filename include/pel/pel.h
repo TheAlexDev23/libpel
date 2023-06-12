@@ -108,4 +108,14 @@ extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t e
 */
 extern int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, int line_offset, pel_text_align_t align, char* text, pel_cord_t cords);
 
+/*
+* Draws triangle P1P2P3
+*/
+extern int pel_draw_triangle(pel_color_t brush_color, pel_cord_t p1, pel_cord_t p2, pel_cord_t p3);
+
+/*
+* Draws filled triangle P1P2P3
+*/
+extern int pel_draw_triangle_full(pel_color_t brush_color, pel_cord_t p1, pel_cord_t p2, pel_cord_t p3);
+
 #endif
