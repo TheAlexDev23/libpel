@@ -89,6 +89,18 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
             row_it++;
         }
 
+        // Additional offset for text aligning
+        int startx = 0;
+
+        if (align == PEL_TEXT_ALIGN_END)
+        {
+            startx = row_width_diff[row_it];
+        }
+        else if (align == PEL_TEXT_ALIGN_CENTER)
+        {
+            startx = row_width_diff[row_it] / 2;
+        }
+
         for (int j = 0; j < bm.height; j++)
         {
             for (int i = 0; i < bm.width; i++)
@@ -98,18 +110,6 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
                 * Like this, they all grown upwards from the same row 
                 */
                 brush_color.a = bm.bm[(bm.height - 1 - j) * bm.width + i].a;
-
-                // Additional offset for text aligning
-                int startx = 0;
-
-                if (align == PEL_TEXT_ALIGN_END)
-                {
-                    startx = row_width_diff[row_it];
-                }
-                else if (align == PEL_TEXT_ALIGN_CENTER)
-                {
-                    startx = row_width_diff[row_it] / 2;
-                }
 
                 int x = offx + i + startx;
                 int y = offy - j;
