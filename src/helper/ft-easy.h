@@ -3,6 +3,12 @@
 
 #include "pel.h"
 
+/* Initialize freetype */
+int _ft_easy_init();
+
+/* Closes freetype */
+int _ft_easy_exit();
+
 /* Gets font bitmap platform-independently */
 int _ft_easy_get_bm(pel_font_t font, char character, pel_bitmap_t* bitmap);
 

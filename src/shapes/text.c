@@ -15,18 +15,15 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
 
     pel_handle_t* handle = _pel_get_cur_handle();
 
-    png_easy_png_t png;
+    if (_ft_easy_init()) return -1;
 
     get_xy_rel_img_center(cords._x, cords._y, handle);
 
     // All bitmaps
     pel_bitmap_t bms[strlen(text)];
 
-    int* row_width = malloc(sizeof(int));
-    *(row_width) = 0;
+    int* row_width = calloc(1, sizeof(int));
 
-    // Element n indicates width - row_width of row n
-    int* row_width_diff = calloc(1, sizeof(int));
     // Iterator for iteration in row_width_diff. Reused throughout this function.
     int row_it = 0;
 
@@ -43,6 +40,7 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
         if (_ft_easy_get_bm(font, text[n], &bm))
         {
             free(row_width);
+            _ft_easy_exit();
             return -1;
         }
 
@@ -68,6 +66,9 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
 
     cords._y -= box_height / 2;
     int offy = cords._y;
+
+    // Element n indicates box_width - row_width of row n
+    int row_width_diff[row_it + 1];
 
     for (int i = 0; i <= row_it; i++)
     {
@@ -120,7 +121,8 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
         offx += bm.width;
     }
 
-    free(row_width_diff);
+    free(row_width);
+    _ft_easy_exit();
 
-    return 0;
+    return 0; 
 }

@@ -11,26 +11,75 @@
 #include "state.h"
 #include "pel.h"
 
+FT_Library ft_lib;
+
+int _ft_easy_init()
+{
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) goto Err;
+
+    if (FT_Init_FreeType(&ft_lib)) goto Err;
+
+    return 0;
+
+    Err:
+    if (handle != NULL)
+    {
+        handle->_err = PEL_ERR_FT_EASY;
+    }
+    
+    return -1;
+}
+
+int _ft_easy_exit()
+{
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return -1;
+
+    if (ft_lib == NULL || FT_Done_FreeType(ft_lib)) 
+    {
+        handle->_err = PEL_ERR_FT_EASY;
+        return -1;
+    }
+
+    return 0;
+}
+
+/* Convert FT bitmap to PEL bitmap */
+void ft_bm_to_pel_bm(FT_Bitmap ft_bm, pel_bitmap_t* pel_bm)
+{
+    int height = ft_bm.rows, width = ft_bm.width;
+    pel_bm->height = height;
+    pel_bm->width = width;
+
+    pel_bm->bm = (pel_color_t*)calloc(height * width, sizeof(pel_color_t));
+
+    for (int j = 0; j < height; j++)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            uint8_t px = ft_bm.buffer[j * ft_bm.pitch + i];
+            pel_bm->bm[j * width + i] = (pel_color_t){.r = 0, .g = 0, .b = 0, .a = px};
+        }
+    }
+}
+
 int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character)
 {
-    FT_Library library;
     FT_Face face;
 
     // At this point it should be already checked for null before
     pel_handle_t* handle = _pel_get_cur_handle();
 
     int err = 0;
-    err = FT_Init_FreeType(&library);
-    if (err) return -1;
 
-    err = FT_New_Face(library,
+    err = FT_New_Face(ft_lib,
                      filename,
                      0,
                      &face);
 
     if (err)
     {
-        FT_Done_FreeType(library);
         handle->_err = PEL_ERR_FT_FONT_NOT_FOUND;
         return -1;
     }
@@ -48,7 +97,6 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
     if (err)
     {
         FT_Done_Face(face);
-        FT_Done_FreeType(library);
         handle->_err = PEL_ERR_FT_LOAD_GLYPH;
         return -1;
     }
@@ -58,31 +106,15 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
     if (err)
     {
         FT_Done_Face(face);
-        FT_Done_FreeType(library);
         handle->_err = PEL_ERR_FT_RENDER_GLYPH;
         return -1;
     }
 
     FT_Bitmap bm = face->glyph->bitmap;
 
-    /* Convert FT bitmap to PEL bitmap */
-    int height = bm.rows, width = bm.width;
-    bitmap->height = height;
-    bitmap->width = width;
-
-    bitmap->bm = (pel_color_t*)calloc(height * width, sizeof(pel_color_t));
-
-    for (int j = 0; j < height; j++)
-    {
-        for (int i = 0; i < width; i++)
-        {
-            uint8_t px = bm.buffer[j * bm.pitch + i];
-            bitmap->bm[j * width + i] = (pel_color_t){.r = 0, .g = 0, .b = 0, .a = px};
-        }
-    }
+    ft_bm_to_pel_bm(bm, bitmap);
 
     FT_Done_Face(face);
-    FT_Done_FreeType(library);
 
     return 0;
 }
