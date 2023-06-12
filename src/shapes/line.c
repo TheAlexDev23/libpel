@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <png.h>
 
 #include "pel.h"
@@ -56,7 +57,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
         {
             float y = m*(float)x + b;
 
-            int rx = x, ry = (int)y;
+            int rx = x, ry = (int)round(y);
 
             get_xy_rel_img_center(rx, ry, handle);
             _px_set_def_color(rx, ry);
@@ -70,7 +71,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
             // x = (y - b) / m
             float x = ((float)y - b) / m;
 
-            int rx = (int)x, ry = y;
+            int rx = (int)round(x), ry = y;
 
             get_xy_rel_img_center(rx, ry, handle);
             _px_set_def_color(rx, ry);

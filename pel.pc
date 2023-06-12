@@ -8,4 +8,4 @@ Description: Photo Editing Libary
 Requires: freetype2 fontconfig libpng
 Version: 1.3
 Cflags: -I${includedir}/pel
-Libs: -L${libdir} -lpel
+Libs: -L${libdir} -lpel -lm

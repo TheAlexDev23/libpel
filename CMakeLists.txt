@@ -53,6 +53,8 @@ endforeach()
 
 target_link_libraries(${PROJECT_NAME} png)
 
+target_link_libraries(${PROJECT_NAME} m)
+
 include(tests/tests.cmake)
 add_subdirectory(tests)
 
