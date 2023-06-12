@@ -7,6 +7,12 @@ typedef enum _pel_image_source_type {
     PEL_IMG_SOURCE_PNG
 } pel_image_source_type_t;
 
+/********************************
+ * 
+ *  Colors
+ * 
+**********************************/
+
 typedef struct _pel_color {
     int r;
     int g;
@@ -14,17 +20,23 @@ typedef struct _pel_color {
     int a;
 } pel_color_t;
 
-typedef struct _pel_bitmap {
-    int height;
-    int width;
-    pel_color_t* bm;
-} pel_bitmap_t;
-
 #define PEL_COLOR_BLACK (pel_color_t){.r = 0, .g = 0, .b = 0, .a = 255}
 #define PEL_COLOR_WHITE (pel_color_t){.r = 255, .g = 255, .b = 255, .a = 255}
 #define PEL_COLOR_RED (pel_color_t){.r = 255, .g = 0, .b = 0, .a = 255}
 #define PEL_COLOR_GREEN (pel_color_t){.r = 0, .g = 255, .b = 0, .a = 255}
 #define PEL_COLOR_BLUE (pel_color_t){.r = 0, .g = 0, .b = 255, .a = 255}
+
+/********************************
+ * 
+ *  Pixels
+ * 
+**********************************/
+
+typedef struct _pel_bitmap {
+    int height;
+    int width;
+    pel_color_t* bm;
+} pel_bitmap_t;
 
 typedef struct _pel_cord {
     int _x;
@@ -32,6 +44,12 @@ typedef struct _pel_cord {
 } pel_cord_t;
 
 #define PEL_CORD(x, y) (pel_cord_t){._x = x, ._y = y}
+
+/********************************
+ * 
+ *  Text
+ * 
+**********************************/
 
 typedef struct _pel_font {
     char* font_family;
@@ -46,6 +64,12 @@ typedef enum _pel_text_align {
     PEL_TEXT_ALIGN_START, 
     PEL_TEXT_ALIGN_END
 } pel_text_align_t;
+
+/********************************
+ * 
+ *  Init/Exit
+ * 
+**********************************/
 
 /* Initializes PEL */
 extern int pel_init(char* filename, pel_image_source_type_t image_type);
