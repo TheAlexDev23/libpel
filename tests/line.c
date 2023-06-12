@@ -12,7 +12,10 @@ int main()
         return -1;
     }
     
-    if (pel_draw_line(PEL_COLOR_WHITE, PEL_CORD(0, 0), PEL_CORD(20, 7)))
+    if (pel_draw_line(PEL_COLOR_RED, PEL_CORD(-50, 50), PEL_CORD(50, -50)) ||
+        pel_draw_line(PEL_COLOR_GREEN, PEL_CORD(-50, -50), PEL_CORD(50, 50)) ||
+        pel_draw_line(PEL_COLOR_BLACK, PEL_CORD(0, 50), PEL_CORD(0, -50)) ||
+        pel_draw_line(PEL_COLOR_WHITE, PEL_CORD(-50, 0), PEL_CORD(50, 0)))
     {
         fprintf(stderr, "Error during draw line %s", pel_strerrno());
         return -1;
