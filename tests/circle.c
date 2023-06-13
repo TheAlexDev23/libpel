@@ -6,7 +6,7 @@
 int main()
 {
     system("mkdir circles");
-    if (pel_init("circles/circle.png", "circles/circle.png", 100, 100)) {
+    if (pel_init("circles/circle.png", "circles/circle.jpeg", 100, 100)) {
         fprintf(stderr, "ERROR: failed init %s\n", pel_strerrno());
         return -1;
     }

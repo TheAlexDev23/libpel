@@ -23,14 +23,14 @@ void _pel_free_cur_handle()
     free(handle->_fn_in);
     free(handle->_fn_out);
 
-    if (handle->_img.pixels == NULL || handle->_img.image_structure == NULL) goto skip_free;
+    if (handle->pixels == NULL || handle->_in_img.image_structure == NULL) goto skip_free;
 
     for (int i = 0; i < handle->_height; i++) {
-        free(handle->_img.pixels[i]);
+        free(handle->pixels[i]);
     }
 
-    free(handle->_img.pixels);
-    free(handle->_img.image_structure);
+    free(handle->pixels);
+    free(handle->_in_img.image_structure);
 
     skip_free:
     free(handle);

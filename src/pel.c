@@ -39,7 +39,9 @@ int pel_init(char* fn_in, char* fn_out, int width, int height)
         if (_image_create_empty(fn_out, handle->_image_out_type, width, height)) return -1;
     }
 
-    return _image_read();
+    if (_image_read(true) || _image_read(false)) return -1;
+
+    return 0;
 }
 
 int pel_save()

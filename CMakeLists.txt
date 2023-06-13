@@ -18,6 +18,8 @@ add_library(
     src/image.c
     src/helper/png-easy.c
     src/helper/png-easy.h
+    src/helper/jpeg-easy.c
+    src/helper/jpeg-easy.h
     src/helper/ft-easy.c
     src/helper/ft-easy.h
     src/pixel.c
@@ -33,13 +35,17 @@ add_library(
 
 find_package(PkgConfig REQUIRED)
 
-set(pkgs freetype2 fontconfig libpng)
-set(pkg_names FREETYPE FONTCONFIG PNG)
+set(pkgs freetype2 fontconfig libpng libturbojpeg libjpeg)
+set(pkg_names FREETYPE FONTCONFIG PNG TURBOJPEG JPEG)
 set(idx 0)
 
 foreach (PACKAGE IN LISTS pkgs)
     list(GET pkg_names ${idx} PKG)
     pkg_check_modules(${PKG} REQUIRED ${PACKAGE})
+    foreach(LIB IN LISTS ${PKG}_LIBRARIES)
+        target_link_libraries(${PROJECT_NAME} ${LIB})
+    endforeach()
+
     foreach (DIR IN LISTS ${PKG}_INCLUDE_DIRS)
         include_directories(${DIR})
     endforeach()

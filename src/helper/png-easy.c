@@ -192,7 +192,7 @@ int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb, pel_cord_t rec
             get_xy_rel_img_center(rx, ry, handle);
 
             png_bytep px = _png_easy_px(png, rx, ry);
-            draw_cb(rx, ry, px);
+            if (px != NULL) draw_cb(rx, ry, px);
         }
     }
 

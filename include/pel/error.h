@@ -10,6 +10,8 @@ typedef enum _pel_error_codes {
     PEL_ERR_FORMAT,
     /* libpng related errors */
     PEL_ERR_PNG_EASY,
+    /* libturbopng related errors*/
+    PEL_ERR_JPEG_EASY,
     /* FreeType related errors */
     PEL_ERR_FT_EASY,
     PEL_ERR_FT_FONT_NOT_FOUND,

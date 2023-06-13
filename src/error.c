@@ -15,6 +15,8 @@ char* pel_strerr(PEL_ERROR err)
             return "The provided format is not supported or recognized by PEL";
         case PEL_ERR_PNG_EASY:
             return "Error with internal PEL libpng wrapper";
+        case PEL_ERR_JPEG_EASY:
+            return "Error with internal PEL libturbojpeg wrapper";
         case PEL_ERR_FT_EASY:
             return "Error with internal PEL freetype wrapper";
         case PEL_ERR_FT_FONT_NOT_FOUND:
@@ -26,9 +28,9 @@ char* pel_strerr(PEL_ERROR err)
         case PEL_SUCCESS:
             return "No errors";
         case PEL_ERR_UNKOWN:
-            return "Unkown error";
+            return "Specified unkown error";
         default:
-            return "Unkown error";
+            return "Unspecified unkown error";
     }
 }
 
