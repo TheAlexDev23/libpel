@@ -101,7 +101,7 @@ Each PEL function returns -1 on error. Error codes and errors can be accessed wi
 
 - pel_image_source_type -> Soon to be deprecated, defines the file type of the image pel will be working on.
 - pel_color_t -> rgba color
-- PEL_COLOR_(BLACK/WHITE/RED/GREEN/BLUE) -> macros facilitating returning pel_color_t
+- PEL_COLOR_(BLACK/WHITE/RED/GREEN/BLUE) -> macros facilitating the creatoin of pel_color_t
 - pel_bitmap_t
 - pel_cord_t -> 2D coordinate
 - PEL_CORD -> macro facilitating the creation of pel_cord_t
