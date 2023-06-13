@@ -75,4 +75,34 @@ int main()
 The [tests folder](/tests/) has a series of tests used in development to test the functionality of the library. They are good examples of the functionaity and API of PEL.
 
 ## Documentation
-Comming soon. I'm currrently only focusing on just the development but I'll probably add API and internal (structure relaated, useful for development) documentation after I finish the base functionality.
+Comming soon. I'm currrently only focusing on just the development but I'll probably add API and internal (structure relaated, useful for development) documentation after I finish the base functionality. But as a general overview, the API has these functions:
+
+### Functions
+
+**Shapes**
+
+- pel_draw_circle
+- pel_draw_circle_full
+- pel_draw_rectangle
+- pel_draw_rectangle_full
+- pel_draw_line
+- pel_draw_textbox
+- pel_Draw_triangle
+- pel_draw_triangle_full
+
+**Error handling**
+Each PEL function returns -1 on error. Error codes and errors can be accessed with:
+- pel_errno -> current error code
+- pel_sterr -> description of error
+- pel_strerrno -> description of current error code
+
+**Structs, enums and macros**
+- pel_image_source_type -> Soon to be deprecated, defines the file type of the image pel will be working on.
+- pel_color_t -> rgba color
+- PEL_COLOR_(BLACK/WHITE/RED/GREEN/BLUE) -> macros facilitating returning pel_color_t
+- pel_bitmap_t
+- pel_cord_t -> 2D coordinate
+- PEL_CORD -> macro facilitating the creation of pel_cord_t
+- pel_font_t -> represenatation of a font
+- PEL_FONT -> macro facilitating the creation of fonts
+- pel_text_align_t -> enum representing alignment of text
