@@ -110,12 +110,23 @@ int _image_draw(_pel_image_draw_cb_t draw_cb)
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
+    pel_cord_t screen_start = PEL_CORD(0, 0);
+    pel_cord_t screen_end = PEL_CORD(handle->_width, handle->_height);
+
+    return _image_draw_rect(draw_cb, screen_start, screen_end);
+}
+
+int _image_draw_rect(_pel_image_draw_cb_t draw_cb, pel_cord_t rect_start, pel_cord_t rect_end)
+{
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return -1;
+
     _cur_draw_cb = draw_cb;
 
     switch (handle->_image_source_type)
     {
         case PEL_IMG_SOURCE_PNG: ;
-            if (_png_easy_draw(png_from_handle(handle), image_png_draw_cb))
+            if (_png_easy_draw(png_from_handle(handle), image_png_draw_cb, rect_start, rect_end))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
                 return -1;

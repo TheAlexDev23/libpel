@@ -10,6 +10,8 @@
 #include <string.h>
 
 #include "png-easy.h"
+#include "image.h"
+#include "handle.h"
 
 int _png_easy_read(char* filename, png_easy_png_t* png_easy)
 {
@@ -182,14 +184,20 @@ int _png_easy_write(char* filename, png_easy_png_t png_easy)
     return 0;
 }
 
-int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb)
+int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb, pel_cord_t rect_start, pel_cord_t rect_end)
 {
-    for (int y = 0; y < png.height; y++)
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return -1;
+
+    for (int y = rect_start._y; y < rect_end._y; y++)
     {
-        for (int x = 0; x < png.width; x++)
+        for (int x = rect_start._x; x < rect_end._x; x++)
         {
-            png_bytep px = _png_easy_px(png, x, y);
-            draw_cb(x, y, px);
+            int rx = x, ry = y;
+            get_xy_rel_img_center(rx, ry, handle);
+
+            png_bytep px = _png_easy_px(png, rx, ry);
+            draw_cb(rx, ry, px);
         }
     }
 

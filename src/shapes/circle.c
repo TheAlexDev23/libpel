@@ -58,7 +58,10 @@ int draw_circle_base(pel_color_t brush_color, int x, int y, int r, _pel_image_dr
 
     _set_color(brush_color);
 
-    if (_image_draw(draw_cb))
+    pel_cord_t start = PEL_CORD(x - r, y - r);
+    pel_cord_t end = PEL_CORD(x + r + 1, y + r + 1);
+
+    if (_image_draw_rect(draw_cb, start, end))
     {
         handle->_err = PEL_ERR_PNG_EASY;
         return -1;

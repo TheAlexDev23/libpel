@@ -1,4 +1,5 @@
-#include <stdlib.h> // abs
+#include <stdlib.h>
+#include <math.h>
 
 #include "pel.h"
 
@@ -74,5 +75,13 @@ int pel_draw_triangle_full(pel_color_t brush_color, pel_cord_t p1, pel_cord_t p2
 
     _set_color(brush_color);
 
-    return _image_draw(triangle_full_draw_cb);
+    int minx = fmin(fmin(p1._x, p2._x), p3._x); 
+    int miny = fmin(fmin(p1._y, p2._y), p3._y); 
+    int maxx = fmax(fmax(p1._x, p2._x), p3._x); 
+    int maxy = fmax(fmax(p1._y, p2._y), p3._y);
+
+    pel_cord_t start = PEL_CORD(minx, miny);
+    pel_cord_t end = PEL_CORD(maxx, maxy);
+
+    return _image_draw_rect(triangle_full_draw_cb, start, end);
 }

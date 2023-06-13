@@ -2,6 +2,8 @@
 #define _PNG_EASY_INCLUDED
 
 #include <png.h>
+#include "pel.h"
+
 typedef struct _png_easy_png {
     int width;
     int height;
@@ -22,7 +24,7 @@ int _png_easy_write(char* filename, png_easy_png_t png_easy);
 typedef void (*_png_easy_draw_cb)(int x, int y, png_bytep px);
 
 /* Draws png by calling draw_cb for each pixel */
-int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb);
+int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb, pel_cord_t rect_start, pel_cord_t rect_end);
 
 png_bytep _png_easy_px(png_easy_png_t png, int x, int y);
 
