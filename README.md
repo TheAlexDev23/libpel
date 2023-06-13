@@ -91,12 +91,14 @@ Comming soon. I'm currrently only focusing on just the development but I'll prob
 - pel_draw_triangle_full
 
 **Error handling**
+
 Each PEL function returns -1 on error. Error codes and errors can be accessed with:
 - pel_errno -> current error code
 - pel_sterr -> description of error
 - pel_strerrno -> description of current error code
 
 **Structs, enums and macros**
+
 - pel_image_source_type -> Soon to be deprecated, defines the file type of the image pel will be working on.
 - pel_color_t -> rgba color
 - PEL_COLOR_(BLACK/WHITE/RED/GREEN/BLUE) -> macros facilitating returning pel_color_t
