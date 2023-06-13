@@ -8,22 +8,7 @@
 #include "pixel.h"
 
 /* Returns png_easy_png_t referenced by the handle->_img.image_structure */
-png_easy_png_t png_from_handle(pel_handle_t* handle)
-{
-    return *((png_easy_png_t*)handle->_img.image_structure);
-}
-
-/* Converts a png pixel into a pel color */
-pel_color_t png_px_to_pel_color(png_bytep px)
-{
-    pel_color_t pel_color;
-    pel_color.r = px[0];
-    pel_color.g = px[1];
-    pel_color.b = px[2];
-    pel_color.a = px[3];
-
-    return pel_color;
-}
+png_easy_png_t png_from_handle(pel_handle_t* handle) { return *((png_easy_png_t*)handle->_img.image_structure); }
 
 /* Converts a png structure into a pel_image_t */
 pel_image_t png_to_pel(png_easy_png_t png)
@@ -155,14 +140,46 @@ int _image_draw_rect(_pel_image_draw_cb_t draw_cb, pel_cord_t rect_start, pel_co
     return 0;
 }
 
+/* Convert current pixels into pixels of each image type and save to handle */
+int load_pixels()
+{
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return -1;
+
+    for (int j = 0; j < handle->_height; j++)
+    {
+        for (int i = 0; i < handle->_width; i++)
+        {
+            switch(handle->_image_source_type)
+            {
+                case PEL_IMG_SOURCE_PNG:
+                    _png_px_set(_png_easy_px(png_from_handle(handle), i, j), handle->_img.pixels[j][i]);
+                    break;
+                default:
+                    handle->_err = PEL_ERR_UNKOWN;
+                    return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 int _image_write()
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
+    if (load_pixels())
+    {
+        handle->_err = PEL_ERR_UNKOWN;
+        return -1;
+    }
+
     switch (handle->_image_source_type)
     {
         case PEL_IMG_SOURCE_PNG: ;
+
             if (_png_easy_write(handle->_fn, png_from_handle(handle)))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
@@ -175,28 +192,4 @@ int _image_write()
     }
 
     return 0;
-}
-
-int _px_set_def_color(int x, int y)
-{
-    pel_handle_t* handle = _pel_get_cur_handle();
-    if (handle == NULL) return -1;
-
-    switch (handle->_image_source_type)
-    {
-        case PEL_IMG_SOURCE_PNG: ;
-            _png_px_set_def_color(_png_easy_px(png_from_handle(handle), x, y));
-            break;
-        default:
-            handle->_err = PEL_ERR_UNKOWN;
-            return -1;
-    }
-
-    return 0;
-}
-
-int _px_set(int x, int y, pel_color_t color)
-{
-    _set_color(color);
-    return _px_set_def_color(x, y);
 }
