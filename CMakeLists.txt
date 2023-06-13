@@ -26,6 +26,7 @@ add_library(
     src/shapes/circle.c
     src/shapes/line.c
     src/shapes/line.h
+    src/shapes/rectangle.c
     src/shapes/text.c
     src/shapes/triangle.c
 )

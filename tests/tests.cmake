@@ -1,1 +1,1 @@
-set(tests circle line errors text triangle)
+set(tests circle line errors text triangle rectangle)

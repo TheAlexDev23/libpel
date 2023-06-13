@@ -73,7 +73,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     if (dx > iy * dy)
     {
-        for (int x = start._x; x < end._x; x += ix)
+        for (int x = start._x; x <= end._x; x += ix)
         {
             float y = m*(float)x + b;
 
@@ -85,7 +85,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
     }
     else
     {
-        for (int y = start._y; y < end._y; y += iy)
+        for (int y = start._y; y <= end._y; y += iy)
         {
             // y = mx + b
             // x = (y - b) / m

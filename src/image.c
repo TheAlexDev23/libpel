@@ -121,6 +121,20 @@ int _image_draw_rect(_pel_image_draw_cb_t draw_cb, pel_cord_t rect_start, pel_co
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
+    if (rect_start._x > rect_end._x)
+    {
+        int tmp = rect_start._x;
+        rect_start._x = rect_end._x;
+        rect_end._x = tmp;
+    }
+    
+    if (rect_start._y > rect_end._y)
+    {
+        int tmp = rect_start._y;
+        rect_start._y = rect_end._y;
+        rect_end._y = tmp;
+    }
+
     _cur_draw_cb = draw_cb;
 
     switch (handle->_image_source_type)
