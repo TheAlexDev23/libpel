@@ -54,9 +54,7 @@ void triangle_full_draw_cb(int x, int y, pel_color_t px)
     float a3 = triangle_area(pt, tf_p2, tf_p3);
 
     if (a1 + a2 + a3 - tf_a <= ALLOWED_DIFF)
-    {
         _px_set_def_color(x, y);
-    }
 }
 
 int pel_draw_triangle_full(pel_color_t brush_color, pel_cord_t p1, pel_cord_t p2, pel_cord_t p3)

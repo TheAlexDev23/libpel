@@ -28,8 +28,7 @@ int pel_init_create(char* filename, pel_image_source_type_t image_type, int widt
     handle->_width = width;
     handle->_height = height;
 
-    if (_image_create_empty(filename, image_type, width, height))
-        return -1;
+    if (_image_create_empty(filename, image_type, width, height)) return -1;
 
     pel_init(filename, image_type);
 
@@ -40,8 +39,7 @@ int pel_init(char* filename, pel_image_source_type_t image_type)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     /* This function can be called when handle is already initialized */
-    if (handle == NULL)
-    {
+    if (handle == NULL) {
         handle = calloc(1, sizeof(pel_handle_t));
         if (handle == NULL) return -1;
         _pel_set_cur_handle(handle);
@@ -60,11 +58,7 @@ int pel_init(char* filename, pel_image_source_type_t image_type)
 int pel_save()
 {
     pel_handle_t* handle = _pel_get_cur_handle();
-    if (handle == NULL ||
-        _image_write())
-    {
-        return -1;
-    }
+    if (handle == NULL || _image_write()) return -1;
 
     _pel_free_cur_handle();
 

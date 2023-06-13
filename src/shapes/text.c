@@ -34,8 +34,7 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
     cords._x -= box_width / 2;
     int offx = cords._x;
 
-    for (int n = 0; n < strlen(text); n++)
-    {
+    for (int n = 0; n < strlen(text); n++) {
         pel_bitmap_t bm;
         if (_ft_easy_get_bm(font, text[n], &bm))
         {
@@ -46,14 +45,12 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
 
         bms[n] = bm;
 
-        if (bm.height > row_max_height)
-        {
+        if (bm.height > row_max_height) {
             row_max_height = bm.height;
         }
 
         // Here we will have usually went to the next line
-        if (row_width[row_it] + bm.width + offx >= box_width)
-        {
+        if (row_width[row_it] + bm.width + offx >= box_width) {
             row_it++;
             row_width = realloc(row_width, sizeof(int) * (row_it + 1));
             row_width[row_it] = 0;
@@ -70,15 +67,13 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
     // Element n indicates box_width - row_width of row n
     int row_width_diff[row_it + 1];
 
-    for (int i = 0; i <= row_it; i++)
-    {
+    for (int i = 0; i <= row_it; i++) {
         row_width_diff[i] = box_width - row_width[i];
     }
 
     row_it = 0;
 
-    for (int n = 0; n < strlen(text); n++)
-    {
+    for (int n = 0; n < strlen(text); n++) {
         pel_bitmap_t bm = bms[n];
 
         /* Go to next line if next character wont fit */
@@ -92,19 +87,13 @@ int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, in
         // Additional offset for text aligning
         int startx = 0;
 
-        if (align == PEL_TEXT_ALIGN_END)
-        {
+        if (align == PEL_TEXT_ALIGN_END) 
             startx = row_width_diff[row_it];
-        }
-        else if (align == PEL_TEXT_ALIGN_CENTER)
-        {
+        else if (align == PEL_TEXT_ALIGN_CENTER) 
             startx = row_width_diff[row_it] / 2;
-        }
 
-        for (int j = 0; j < bm.height; j++)
-        {
-            for (int i = 0; i < bm.width; i++)
-            {
+        for (int j = 0; j < bm.height; j++) {
+            for (int i = 0; i < bm.width; i++) {
                 /* 
                 * Accessing bottom row to draw from bottom.  
                 * Like this, they all grown upwards from the same row 

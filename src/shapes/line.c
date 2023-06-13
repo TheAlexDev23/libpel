@@ -48,15 +48,13 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
 
     _set_color(brush_color);
 
-    if (start._x > end._x)
-    {
+    if (start._x > end._x) {
         pel_cord_t temp = start;
         start = end;
         end = temp;
     }
 
-    if (start._y > end._y)
-    {
+    if (start._y > end._y) {
         pel_cord_t temp = start;
         start = end;
         end = temp;
@@ -71,10 +69,8 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
     int ix = dx < 0 ? -1 : 1;
     int iy = dy < 0 ? -1 : 1;
 
-    if (dx > iy * dy)
-    {
-        for (int x = start._x; x <= end._x; x += ix)
-        {
+    if (dx > iy * dy) {
+        for (int x = start._x; x <= end._x; x += ix) {
             float y = m*(float)x + b;
 
             int rx = x, ry = (int)round(y);
@@ -83,10 +79,8 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
             _px_set_def_color(rx, ry);
         }
     }
-    else
-    {
-        for (int y = start._y; y <= end._y; y += iy)
-        {
+    else {
+        for (int y = start._y; y <= end._y; y += iy) {
             // y = mx + b
             // x = (y - b) / m
             float x = ((float)y - b) / m;

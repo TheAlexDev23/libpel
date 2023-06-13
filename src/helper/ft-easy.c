@@ -23,10 +23,7 @@ int _ft_easy_init()
     return 0;
 
     Err:
-    if (handle != NULL)
-    {
-        handle->_err = PEL_ERR_FT_EASY;
-    }
+    if (handle != NULL) handle->_err = PEL_ERR_FT_EASY;
     
     return -1;
 }
@@ -36,8 +33,7 @@ int _ft_easy_exit()
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
-    if (ft_lib == NULL || FT_Done_FreeType(ft_lib)) 
-    {
+    if (ft_lib == NULL || FT_Done_FreeType(ft_lib)) {
         handle->_err = PEL_ERR_FT_EASY;
         return -1;
     }
@@ -54,10 +50,8 @@ void ft_bm_to_pel_bm(FT_Bitmap ft_bm, pel_bitmap_t* pel_bm)
 
     pel_bm->bm = (pel_color_t*)calloc(height * width, sizeof(pel_color_t));
 
-    for (int j = 0; j < height; j++)
-    {
-        for (int i = 0; i < width; i++)
-        {
+    for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
             uint8_t px = ft_bm.buffer[j * ft_bm.pitch + i];
             pel_bm->bm[j * width + i] = (pel_color_t){.r = 0, .g = 0, .b = 0, .a = px};
         }
@@ -78,8 +72,7 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
                      0,
                      &face);
 
-    if (err)
-    {
+    if (err) {
         handle->_err = PEL_ERR_FT_FONT_NOT_FOUND;
         return -1;
     }
@@ -94,8 +87,7 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
 
     /* load glyph image into the slot (erase previous one) */
     err = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
-    if (err)
-    {
+    if (err) {
         FT_Done_Face(face);
         handle->_err = PEL_ERR_FT_LOAD_GLYPH;
         return -1;
@@ -103,8 +95,7 @@ int get_font_base(char* filename, int size, pel_bitmap_t* bitmap, char character
 
     /* convert to an anti-aliased bitmap */
     err = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-    if (err)
-    {
+    if (err) {
         FT_Done_Face(face);
         handle->_err = PEL_ERR_FT_RENDER_GLYPH;
         return -1;
@@ -127,8 +118,7 @@ int _ft_easy_get_bm(pel_font_t font, char character, pel_bitmap_t* bitmap)
 
     /* Finding font location in a platform independent way */
     FcBool success = FcInit();
-    if (!success)
-    {
+    if (!success) {
         handle->_err = PEL_ERR_FT_EASY;
         return -1;
     }
@@ -141,12 +131,10 @@ int _ft_easy_get_bm(pel_font_t font, char character, pel_bitmap_t* bitmap)
     FcPattern* matchedPattern = FcFontMatch(NULL, pattern, &result);
 
     FcChar8* fontFile;
-    if (FcPatternGetString(matchedPattern, FC_FILE, 0, &fontFile) == FcResultMatch)
-    {
+    if (FcPatternGetString(matchedPattern, FC_FILE, 0, &fontFile) == FcResultMatch) {
         return get_font_base((char*)fontFile, font.size, bitmap, character);
     }
-    else
-    {
+    else {
         handle->_err = PEL_ERR_FT_FONT_NOT_FOUND;
         return -1;
     }

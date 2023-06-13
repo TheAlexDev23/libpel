@@ -88,8 +88,7 @@ int _png_easy_create_empty(char* filename, int width, int height)
     if (!png_ptr) return -1;
 
     info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr)
-    {
+    if (!info_ptr) {
         png_destroy_write_struct(&png_ptr, NULL);
         fclose(fp);
         return -1;
@@ -118,8 +117,7 @@ int _png_easy_create_empty(char* filename, int width, int height)
 
     // Write empty rows (optional)
     memset(row, 0, 4 * width * sizeof(png_byte));
-    for (int i = 0; i < height; i++)
-    {
+    for (int i = 0; i < height; i++) {
         png_write_row(png_ptr, row);
     }
 
@@ -145,8 +143,7 @@ int _png_easy_write(char* filename, png_easy_png_t png_easy)
     if (!png) return -1;
 
     png_infop info = png_create_info_struct(png);
-    if (!info)
-        return -1;
+    if (!info) return -1;
 
     if (setjmp(png_jmpbuf(png))) return -1;
 
@@ -189,10 +186,8 @@ int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb, pel_cord_t rec
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
-    for (int y = rect_start._y; y < rect_end._y; y++)
-    {
-        for (int x = rect_start._x; x < rect_end._x; x++)
-        {
+    for (int y = rect_start._y; y < rect_end._y; y++) {
+        for (int x = rect_start._x; x < rect_end._x; x++) {
             int rx = x, ry = y;
             get_xy_rel_img_center(rx, ry, handle);
 

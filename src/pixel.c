@@ -21,10 +21,7 @@ void _png_px_set_def_color(png_bytep px)
 
 void _png_px_set(png_bytep px, pel_color_t color)
 {
-    if (px == NULL)
-    {
-        return;
-    }
+    if (px == NULL) return;
 
     _set_color(color);
     _png_px_set_def_color(px);
