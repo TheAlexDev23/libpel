@@ -20,7 +20,8 @@ void _pel_free_cur_handle()
 {
     if (handle == NULL) return;
 
-    free(handle->_fn);
+    free(handle->_fn_in);
+    free(handle->_fn_out);
 
     if (handle->_img.pixels == NULL || handle->_img.image_structure == NULL) goto skip_free;
 

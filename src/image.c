@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "helper/png-easy.h"
 
@@ -6,6 +7,18 @@
 #include "handle.h"
 #include "state.h"
 #include "pixel.h"
+
+/* Returns the image type according to the extension of the file fn */
+pel_image_type _image_type(char* fn)
+{
+    char* extension = strstr(fn, ".");
+    
+    if (strcmp(extension, ".png") == 0) {
+        return PEL_IMG_PNG;
+    }
+
+    return PEL_IMG_CORRUPT;
+}
 
 /* Returns png_easy_png_t referenced by the handle->_img.image_structure */
 png_easy_png_t png_from_handle(pel_handle_t* handle) { return *((png_easy_png_t*)handle->_img.image_structure); }
@@ -34,10 +47,10 @@ int _image_read()
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
-    switch(handle->_image_source_type) {
-        case PEL_IMG_SOURCE_PNG: ;
+    switch(handle->_image_in_type) {
+        case PEL_IMG_PNG: ;
             png_easy_png_t* png = malloc(sizeof(png_easy_png_t));
-            if (_png_easy_read(handle->_fn, png)) {
+            if (_png_easy_read(handle->_fn_in, png)) {
                 handle->_err = PEL_ERR_PNG_EASY;
                 return -1;
             }
@@ -49,27 +62,27 @@ int _image_read()
             handle->_height = png->height;
             break;
         default:
-            handle->_err = PEL_ERR_UNKOWN;
+            handle->_err = PEL_ERR_FORMAT;
             return -1;
     }
 
     return 0;
 }
 
-int _image_create_empty(char* filename, pel_image_source_type_t image_type, int width, int height)
+int _image_create_empty(char* filename, pel_image_type image_type, int width, int height)
 {
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
     switch (image_type) {
-        case PEL_IMG_SOURCE_PNG: ;
+        case PEL_IMG_PNG: ;
             if (_png_easy_create_empty(filename, width, height)) {
                 handle->_err = PEL_ERR_PNG_EASY;
                 return -1;
             }
             break;
         default:
-            handle->_err = PEL_ERR_UNKOWN;
+            handle->_err = PEL_ERR_FORMAT;
             return -1;
     }
     return 0;
@@ -110,8 +123,8 @@ int _image_draw_rect(_pel_image_draw_cb_t draw_cb, pel_cord_t rect_start, pel_co
 
     _cur_draw_cb = draw_cb;
 
-    switch (handle->_image_source_type) {
-        case PEL_IMG_SOURCE_PNG: ;
+    switch (handle->_image_in_type) {
+        case PEL_IMG_PNG: ;
             if (_png_easy_draw(png_from_handle(handle), image_png_draw_cb, rect_start, rect_end))
             {
                 handle->_err = PEL_ERR_PNG_EASY;
@@ -119,7 +132,7 @@ int _image_draw_rect(_pel_image_draw_cb_t draw_cb, pel_cord_t rect_start, pel_co
             }
             break;
         default:
-            handle->_err = PEL_ERR_UNKOWN;
+            handle->_err = PEL_ERR_FORMAT;
             return -1;
             break;
     }
@@ -135,12 +148,12 @@ int load_pixels()
 
     for (int j = 0; j < handle->_height; j++) {
         for (int i = 0; i < handle->_width; i++) {
-            switch(handle->_image_source_type) {
-                case PEL_IMG_SOURCE_PNG:
+            switch(handle->_image_in_type) {
+                case PEL_IMG_PNG:
                     _png_px_set(_png_easy_px(png_from_handle(handle), i, j), handle->_img.pixels[j][i]);
                     break;
                 default:
-                    handle->_err = PEL_ERR_UNKOWN;
+                    handle->_err = PEL_ERR_FORMAT;
                     return -1;
             }
         }
@@ -159,15 +172,15 @@ int _image_write()
         return -1;
     }
 
-    switch (handle->_image_source_type) {
-        case PEL_IMG_SOURCE_PNG: ;
-            if (_png_easy_write(handle->_fn, png_from_handle(handle))) {
+    switch (handle->_image_out_type) {
+        case PEL_IMG_PNG: ;
+            if (_png_easy_write(handle->_fn_out, png_from_handle(handle))) {
                 handle->_err = PEL_ERR_PNG_EASY;
                 return -1;
             }
             break;
         default:
-            handle->_err = PEL_ERR_UNKOWN;
+            handle->_err = PEL_ERR_FORMAT;
             return -1;
     }
 

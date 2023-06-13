@@ -9,7 +9,7 @@
 #include "handle.h"
 #include "image.h"
 
-int pel_init_create(char* filename, pel_image_source_type_t image_type, int width, int height)
+int pel_init(char* fn_in, char* fn_out, int width, int height)
 {
     pel_handle_t* handle = calloc(1, sizeof(pel_handle_t));
     if (handle == NULL) return -1;
@@ -17,10 +17,13 @@ int pel_init_create(char* filename, pel_image_source_type_t image_type, int widt
 
     handle->_err = PEL_SUCCESS;
 
-    handle->_image_source_type = image_type;
+    handle->_image_in_type = _image_type(fn_in);
+    handle->_image_out_type = _image_type(fn_out);
 
-    handle->_fn = malloc(strlen(filename) + 1);
-    strcpy(handle->_fn, filename),
+    handle->_fn_in = malloc(strlen(fn_in) + 1);
+    strcpy(handle->_fn_in, fn_in);
+    handle->_fn_out = malloc(strlen(fn_out) + 1);
+    strcpy(handle->_fn_out, fn_out);
 
     handle->_centerX = width / 2;
     handle->_centerY = height / 2;
@@ -28,29 +31,13 @@ int pel_init_create(char* filename, pel_image_source_type_t image_type, int widt
     handle->_width = width;
     handle->_height = height;
 
-    if (_image_create_empty(filename, image_type, width, height)) return -1;
-
-    pel_init(filename, image_type);
-
-    return 0;
-}
-
-int pel_init(char* filename, pel_image_source_type_t image_type)
-{
-    pel_handle_t* handle = _pel_get_cur_handle();
-    /* This function can be called when handle is already initialized */
-    if (handle == NULL) {
-        handle = calloc(1, sizeof(pel_handle_t));
-        if (handle == NULL) return -1;
-        _pel_set_cur_handle(handle);
+    if (access(fn_in, F_OK)) {
+        if (_image_create_empty(fn_in, handle->_image_in_type, width, height)) return -1;
     }
 
-    handle->_err = PEL_SUCCESS;
-
-    handle->_image_source_type = image_type;
-
-    handle->_fn = malloc(strlen(filename) + 1);
-    strcpy(handle->_fn, filename);
+    if (access(fn_out, F_OK)) {
+        if (_image_create_empty(fn_out, handle->_image_out_type, width, height)) return -1;
+    }
 
     return _image_read();
 }

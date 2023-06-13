@@ -3,9 +3,10 @@
 
 #include "error.h"
 
-typedef enum _pel_image_source_type {
-    PEL_IMG_SOURCE_PNG
-} pel_image_source_type_t;
+typedef enum _pel_image_type {
+    PEL_IMG_PNG,
+    PEL_IMG_CORRUPT
+} pel_image_type;
 
 /********************************
  * 
@@ -71,11 +72,8 @@ typedef enum _pel_text_align {
  * 
 **********************************/
 
-/* Initializes PEL */
-extern int pel_init(char* filename, pel_image_source_type_t image_type);
-
-/* Creates/overwrites filename and initializes pel as normal */
-extern int pel_init_create(char* filename, pel_image_source_type_t image_type, int width, int height);
+/* Initialazes pel */
+extern int pel_init(char* fn_in, char* fn_out, int width, int height);
 
 /* Closes pel and saves modifications */
 extern int pel_save();

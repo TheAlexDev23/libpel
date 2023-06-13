@@ -4,7 +4,6 @@ project(tests)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(PEL REQUIRED pel)
 
-# set(tests circle line errors)
 include(tests.cmake)
 
 foreach (element IN LISTS tests)

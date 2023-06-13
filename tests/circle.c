@@ -6,7 +6,7 @@
 int main()
 {
     system("mkdir circles");
-    if (pel_init_create("circles/circle.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("circles/circle.png", "circles/circle.png", 100, 100)) {
         fprintf(stderr, "ERROR: failed init %s\n", pel_strerrno());
         return -1;
     }
@@ -21,7 +21,7 @@ int main()
         return -1;
     }
 
-    if (pel_init_create("circles/circle-full.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("circles/circle-full.png", "circles/circle-full.png", 100, 100)) {
         fprintf(stderr, "ERROR: failed init %s\n", pel_strerrno());
         return -1;
     }

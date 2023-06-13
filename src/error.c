@@ -11,6 +11,8 @@ char* pel_strerr(PEL_ERROR err)
     switch(err) {
         case PEL_ERR_HANDLE_NULL:
             return "PEL internal handle is NULL. Make sure to initialize before use";
+        case PEL_ERR_FORMAT:
+            return "The provided format is not supported or recognized by PEL";
         case PEL_ERR_PNG_EASY:
             return "Error with internal PEL libpng wrapper";
         case PEL_ERR_FT_EASY:

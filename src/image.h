@@ -17,11 +17,14 @@ typedef struct _pel_image {
 /* Makes x,y = center + x,y on an mathematical grid  */
 #define get_xy_rel_grid_center(x, y, handle) (x = x - handle->_centerX) * -1; y = (y - handle->_centerY) * -1;
 
+/* Returns the image type according to the extension of the file fn */
+pel_image_type _image_type(char* fn);
+
 /* Callback type for drawing */
 typedef void (*_pel_image_draw_cb_t)(int x, int y, pel_color_t px);
 
 /* Create empty image */
-int _image_create_empty(char* filename, pel_image_source_type_t image_type, int width, int height);
+int _image_create_empty(char* filename, pel_image_type image_type, int width, int height);
 
 /* Load image data into current handle */
 int _image_read();

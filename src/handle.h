@@ -5,9 +5,11 @@
 #include "image.h"
 
 typedef struct _pel_handle {
-    char* _fn;
+    char* _fn_in;
+    char* _fn_out;
     
-    pel_image_source_type_t _image_source_type;
+    pel_image_type _image_in_type;
+    pel_image_type _image_out_type;
     pel_image_t _img;
 
     int _width;

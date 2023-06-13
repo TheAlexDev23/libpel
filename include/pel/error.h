@@ -7,6 +7,7 @@ typedef enum _pel_error_codes {
     PEL_ERR_UNKOWN = -1,
     PEL_SUCCESS = 0,
     PEL_ERR_HANDLE_NULL,
+    PEL_ERR_FORMAT,
     /* libpng related errors */
     PEL_ERR_PNG_EASY,
     /* FreeType related errors */

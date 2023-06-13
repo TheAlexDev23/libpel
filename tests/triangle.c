@@ -6,7 +6,7 @@
 int main()
 {
     system("mkdir triangles");
-    if (pel_init_create("triangles/triangle1.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("triangles/triangle.png", "triangles/triangle.png", 100, 100)) {
         fprintf(stderr, "Error durign pel init %s\n", pel_strerrno());
         return -1;
     }
@@ -20,7 +20,7 @@ int main()
 
     pel_save();
 
-    if (pel_init_create("triangles/triangle2.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("triangles/triangle-full.png", "triangles/triangle-full.png", 100, 100)) {
         fprintf(stderr, "Error durign pel init %s\n", pel_strerrno());
         return -1;
     }

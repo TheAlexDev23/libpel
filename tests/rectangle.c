@@ -7,7 +7,7 @@ int main()
 {
     system("mkdir rectangles");
 
-    if (pel_init_create("rectangles/rectangle.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("rectangles/rectangle.png", "rectangles/rectangle.png", 100, 100)) {
         fprintf(stderr, "Error during init %s\n", pel_strerrno());
         return -1;
     }
@@ -19,7 +19,7 @@ int main()
 
     pel_save();
 
-    if (pel_init_create("rectangles/rectangle-full.png", PEL_IMG_SOURCE_PNG, 100, 100)) {
+    if (pel_init("rectangles/rectangle-full.png", "rectangles/rectangle-full.png" , 100, 100)) {
         fprintf(stderr, "Error during init %s\n", pel_strerrno());
         return -1;
     }
