@@ -87,7 +87,7 @@ Comming soon. I'm currrently only focusing on just the development but I'll prob
 - pel_draw_rectangle_full
 - pel_draw_line
 - pel_draw_textbox
-- pel_Draw_triangle
+- pel_draw_triangle
 - pel_draw_triangle_full
 
 **Error handling**
