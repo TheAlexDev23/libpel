@@ -34,7 +34,7 @@ pel_cord_t tf_p3;
 
 /* Precalculated value of tf triangle area */
 float tf_a;
-
+#define ALLOWED_DIFF 1
 void triangle_full_draw_cb(int x, int y, pel_color_t px)
 {
     pel_handle_t* handle;
@@ -52,7 +52,7 @@ void triangle_full_draw_cb(int x, int y, pel_color_t px)
     float a2 = triangle_area(pt, tf_p1, tf_p3);
     float a3 = triangle_area(pt, tf_p2, tf_p3);
 
-    if (a1 + a2 + a3 == tf_a)
+    if (a1 + a2 + a3 - tf_a <= ALLOWED_DIFF)
     {
         _px_set_def_color(x, y);
     }
