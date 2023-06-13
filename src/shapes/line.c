@@ -41,7 +41,7 @@ int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end)
     if (dx != 0)
         m = (float)dy / (float)dx;
     else
-        // This value should techinically be infinity. But since we can't really to that we increase the slope proporsionally to screen height
+        // This value should techinically be infinity. But since we can't really to that we increase the slope proportionally to screen height
         m = handle->_height;
 
     // y = mx + b
