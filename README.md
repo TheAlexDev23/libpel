@@ -79,6 +79,10 @@ Comming soon. I'm currrently only focusing on just the development but I'll prob
 
 ### Functions
 
+**Init Exit**
+- pel_init
+- pel_save
+
 **Shapes**
 
 - pel_draw_circle
@@ -99,7 +103,6 @@ Each PEL function returns -1 on error. Error codes and errors can be accessed wi
 
 **Structs, enums and macros**
 
-- pel_image_source_type -> Soon to be deprecated, defines the file type of the image pel will be working on.
 - pel_color_t -> rgba color
 - PEL_COLOR_(BLACK/WHITE/RED/GREEN/BLUE) -> macros facilitating the creatoin of pel_color_t
 - pel_bitmap_t
