@@ -8,8 +8,8 @@
 typedef struct _jpeg_easy_jpeg {
     int width;
     int height;
-
-    int subsamp;
+    
+    int row_size;
 
     uint8_t* pixels;
 } jpeg_easy_jpeg_t;

@@ -35,8 +35,8 @@ add_library(
 
 find_package(PkgConfig REQUIRED)
 
-set(pkgs freetype2 fontconfig libpng libturbojpeg libjpeg)
-set(pkg_names FREETYPE FONTCONFIG PNG TURBOJPEG JPEG)
+set(pkgs freetype2 fontconfig libpng libjpeg)
+set(pkg_names FREETYPE FONTCONFIG PNG JPEG)
 set(idx 0)
 
 foreach (PACKAGE IN LISTS pkgs)

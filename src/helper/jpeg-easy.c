@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <turbojpeg.h>
 #include <jpeglib.h>
 
 #include "pel.h"
@@ -26,28 +25,25 @@ int _jpeg_easy_create_empty(char* filename, int width, int height)
 
     cinfo.image_width = width;
     cinfo.image_height = height;
-
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
 
-    int quality = PEL_JPEG_EASY_QUALITY;
-
-    unsigned char* jpeg_buffer = (unsigned char *)malloc(width * height * 4);
+    jpeg_set_defaults(&cinfo);
+    jpeg_set_quality(&cinfo, PEL_JPEG_EASY_QUALITY, TRUE);
 
     FILE *fp = fopen(filename, "wb");
     if (fp == NULL)
         return -1;
-    
     jpeg_stdio_dest(&cinfo, fp);
-    jpeg_set_defaults(&cinfo);
-    jpeg_set_quality(&cinfo, quality, TRUE);
-    jpeg_start_compress(&cinfo, FALSE);
+
+    jpeg_start_compress(&cinfo, true);
 
     // Write empty scanlines
-    JSAMPROW row_pointer[1];
-    int row_stride = width * cinfo.input_components;
-    unsigned char dummy_scanline[row_stride];
-    memset(dummy_scanline, 0, row_stride);  // Fill with zeros
+    uint8_t* row_pointer[1];
+    int row_size = width * cinfo.input_components;
+    uint8_t dummy_scanline[row_size];
+    /* Fill with 0 */
+    memset(dummy_scanline, 0, row_size);
 
     while (cinfo.next_scanline < cinfo.image_height) {
         row_pointer[0] = dummy_scanline;
@@ -64,81 +60,88 @@ int _jpeg_easy_create_empty(char* filename, int width, int height)
 
 int _jpeg_easy_read(char *filename, jpeg_easy_jpeg_t *jpeg)
 {
-    FILE *fp = fopen(filename, "rb");
-    if (fp == NULL)
-        return -1;
+    struct jpeg_decompress_struct info;
 
-    // TODO: Replace stat for a multiplatform function capable of reading large files in _jpeg_easy_read
+    struct jpeg_error_mgr err;
+    info.err = jpeg_std_error(&err);
 
-    struct stat st;
-    if (stat(filename, &st))
-        return -1;
+    jpeg_create_decompress(&info);
 
-    int file_size = st.st_size;
+    FILE* fp = fopen(filename, "rb");
+    if (fp == NULL) return -1;
+    jpeg_stdio_src(&info, fp);
 
-    // Contents of file
-    uint8_t *file_buffer = (unsigned char *)malloc(file_size);
-    fread(file_buffer, 1, file_size, fp);
+    jpeg_read_header(&info, true);
+    jpeg_start_decompress(&info);
+
+    int width = info.output_width;
+    int height = info.output_height;
+    int row_size = info.output_width * info.output_components;
+
+    jpeg->width = width;
+    jpeg->height = height;
+    jpeg->row_size = row_size;
+
+    /* Length of all pixel data in bytes */
+    int image_bytes = row_size * height;
+
+    jpeg->pixels = malloc(image_bytes);
+
+    uint8_t* row_buffer[1];
+
+    while (info.output_scanline < height) {
+        row_buffer[0] = &(jpeg->pixels[row_size * info.output_scanline]);
+        jpeg_read_scanlines(&info, row_buffer, 1);
+    }
+
+    jpeg_finish_decompress(&info);
+    jpeg_destroy_decompress(&info);
+
     fclose(fp);
 
-    tjhandle tj = tjInitDecompress();
-
-    if (tjDecompressHeader2(tj, file_buffer, file_size, &(jpeg->width), &(jpeg->height), &(jpeg->subsamp)))
-        return -1;
-
-    // Decompressed image
-    jpeg->pixels = (uint8_t *)malloc(jpeg->width * jpeg->height * 3);
-
-    if (tjDecompress2(tj, file_buffer, file_size, jpeg->pixels, jpeg->width, 0, jpeg->height, TJPF_RGB, 0))
-        return -1;
-
-    return tjDestroy(tj);
+    return 0;
 }
 
 int _jpeg_easy_write(char *filename, jpeg_easy_jpeg_t jpeg)
 {
-    pel_handle_t* handle = _pel_get_cur_handle();
-    if (handle == NULL) return -1;
-
     int quality = PEL_JPEG_EASY_QUALITY;
     int width = jpeg.width;
     int height = jpeg.height;
-    int subsamp = jpeg.subsamp;
+    int row_size = jpeg.row_size;
 
-    tjhandle tj = tjInitCompress();
+    struct jpeg_compress_struct cinfo;
+
+    struct jpeg_error_mgr jerr;
+    cinfo.err = jpeg_std_error(&jerr);
+
+    jpeg_create_compress(&cinfo);
 
     FILE *fp = fopen(filename, "wb");
     if (fp == NULL)
         return -1;
-
-    struct jpeg_compress_struct cinfo;
-    struct jpeg_error_mgr jerr;
-
-    cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_compress(&cinfo);
+    jpeg_stdio_dest(&cinfo, fp);
 
     cinfo.image_width = width;
     cinfo.image_height = height;
-
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
     
-    jpeg_stdio_dest(&cinfo, fp);
     jpeg_set_defaults(&cinfo);
     jpeg_set_quality(&cinfo, quality, TRUE);
+
     jpeg_start_compress(&cinfo, FALSE);
 
-    // Write empty scanlines
-    JSAMPROW row_pointer[1];
-    int row_stride = width * cinfo.input_components;
+    uint8_t* row_pointer[1];
 
     while (cinfo.next_scanline < cinfo.image_height) {
-        row_pointer[0] = &(jpeg.pixels[cinfo.next_scanline * jpeg.width]);
+        row_pointer[0] = &(jpeg.pixels[row_size * cinfo.next_scanline]);
         jpeg_write_scanlines(&cinfo, row_pointer, 1);
     }
 
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
+
+    fclose(fp);
 
     return 0;
 }
@@ -166,5 +169,5 @@ uint8_t* _jpeg_easy_px(jpeg_easy_jpeg_t jpeg, int x, int y)
     if (y >= jpeg.height || x >= jpeg.width)
         return NULL;
 
-    return &(jpeg.pixels[y * jpeg.width + x * 3]);
+    return &(jpeg.pixels[y * jpeg.row_size + x * 3]);
 }

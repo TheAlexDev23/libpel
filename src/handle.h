@@ -11,8 +11,8 @@ typedef struct _pel_handle {
     pel_image_type _image_in_type;
     pel_image_type _image_out_type;
 
-    pel_image_t _in_img;
-    pel_image_t _out_img;
+    void* _in_image_struct;
+    void* _out_image_struct;
 
     pel_color_t** pixels;
 

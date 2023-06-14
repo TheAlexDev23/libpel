@@ -6,11 +6,6 @@
 
 #include "pel.h"
 
-typedef struct _pel_image {
-    /* Pointer to image structure according to the type of image. Either png_easy_png_t or ... */
-    void* image_structure;
-} pel_image_t;
-
 /* Makes x,y = center + x,y on an image grid (starts top left) */
 #define get_xy_rel_img_center(x, y, handle) x = handle->_centerX + x; y = handle->_centerY - y;
 

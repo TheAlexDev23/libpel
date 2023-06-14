@@ -27,32 +27,31 @@ pel_image_type _image_type(char* fn)
 png_easy_png_t png_from_handle(pel_handle_t* handle, bool in) 
 { 
     if (in)
-        return *((png_easy_png_t*)handle->_in_img.image_structure); 
+        return *((png_easy_png_t*)handle->_in_image_struct); 
     else 
-        return *((png_easy_png_t*)handle->_out_img.image_structure); 
+        return *((png_easy_png_t*)handle->_out_image_struct); 
 }
 
 /* Returns jpeg_easy_jpeg_t referenced by the handle->_img.image_structure */
 jpeg_easy_jpeg_t jpeg_from_handle(pel_handle_t* handle, bool in) 
 {
     if (in)
-        return *((jpeg_easy_jpeg_t*)handle->_in_img.image_structure); 
+        return *((jpeg_easy_jpeg_t*)handle->_in_image_struct);
     else
-        return *((jpeg_easy_jpeg_t*)handle->_out_img.image_structure); 
+        return *((jpeg_easy_jpeg_t*)handle->_out_image_struct);
 }
 
-/* Converts a png structure into a pel_image_t */
-pel_image_t png_to_pel(png_easy_png_t png)
+int write_png_pixels_to_handle(png_easy_png_t png)
 {
     pel_image_t img;
     pel_handle_t* handle = _pel_get_cur_handle();
-    if (handle == NULL) return img;
+    if (handle == NULL) return -1;
 
     handle->pixels = malloc(png.height * sizeof(pel_color_t*));
     for (int i = 0; i < png.height; i++) {
         handle->pixels[i] = malloc(png.width * sizeof(pel_color_t));
     }
-
+    
     for (int j = 0; j < png.height; j++) {
         for (int i = 0; i < png.width; i++) {
             handle->pixels[j][i] = png_px_to_pel_color(
@@ -60,14 +59,14 @@ pel_image_t png_to_pel(png_easy_png_t png)
         }
     }
 
-    return img;
+    return 0;
 }
 
-pel_image_t jpeg_to_pel(jpeg_easy_jpeg_t jpeg)
+int write_jpeg_pixels_to_handle(jpeg_easy_jpeg_t jpeg)
 {
     pel_image_t img;
     pel_handle_t* handle = _pel_get_cur_handle();
-    if (handle == NULL) return img;
+    if (handle == NULL) return -1;
 
     handle->pixels = malloc(jpeg.height * sizeof(pel_color_t*));
     for (int i = 0; i < jpeg.height; i++) {
@@ -81,7 +80,7 @@ pel_image_t jpeg_to_pel(jpeg_easy_jpeg_t jpeg)
         }
     }
 
-    return img;
+    return 0;
 }
 
 /* Specifying "if in file" is important because we will eventually read both in and out files */
@@ -91,8 +90,14 @@ int _image_read(bool in)
     if (handle == NULL) return -1;
 
     char* fn = in ? handle->_fn_in : handle->_fn_out;
-    pel_image_t* img = in ? &(handle->_in_img) : &(handle->_out_img);
 
+    void** img = in ? &handle->_in_image_struct : &handle->_out_image_struct;
+
+    /*
+    * Load image data for each type of image
+    * Write pixels if in file
+    * Set handle data
+    */
     switch(in ? handle->_image_in_type : handle->_image_out_type) {
         case PEL_IMG_PNG: ;
             png_easy_png_t* png = malloc(sizeof(png_easy_png_t));
@@ -101,8 +106,9 @@ int _image_read(bool in)
                 return -1;
             }
 
-            *img = png_to_pel(*png);
-            img->image_structure = png;
+            if (in) write_png_pixels_to_handle(*png);
+
+            *img = png;
 
             handle->_width = png->width;
             handle->_height = png->height;
@@ -114,8 +120,9 @@ int _image_read(bool in)
                 return -1;
             }
 
-            *img = jpeg_to_pel(*jpeg);
-            img->image_structure = jpeg;
+            if (in) write_jpeg_pixels_to_handle(*jpeg);
+
+            *img = jpeg;
 
             handle->_width = jpeg->width;
             handle->_width = jpeg->height;
