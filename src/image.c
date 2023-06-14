@@ -43,7 +43,6 @@ jpeg_easy_jpeg_t jpeg_from_handle(pel_handle_t* handle, bool in)
 
 int write_png_pixels_to_handle(png_easy_png_t png)
 {
-    pel_image_t img;
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
@@ -64,7 +63,6 @@ int write_png_pixels_to_handle(png_easy_png_t png)
 
 int write_jpeg_pixels_to_handle(jpeg_easy_jpeg_t jpeg)
 {
-    pel_image_t img;
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
