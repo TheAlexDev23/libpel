@@ -113,6 +113,60 @@ int write_webp_pixels_to_handle(webp_easy_webp_t webp)
     return 0;
 }
 
+int _image_dimensions(char* fn, int* width, int* height)
+{
+    pel_handle_t* handle = _pel_get_cur_handle();
+    if (handle == NULL) return -1;
+
+    int _width = 0;
+    int _height = 0;
+
+    switch(_image_type(fn))
+    {
+        case PEL_IMG_PNG: ;
+            png_easy_png_t* png = malloc(sizeof(png_easy_png_t));
+            if (_png_easy_read(fn, png)) {
+                handle->_err = PEL_ERR_PNG_EASY;
+                return -1;
+            }
+
+            _width = png->width;
+            _height = png->height;
+
+            free(png);
+            break;
+        case PEL_IMG_JPEG: ;
+            jpeg_easy_jpeg_t* jpeg = malloc(sizeof(jpeg_easy_jpeg_t));
+            if (_jpeg_easy_read(fn, jpeg)) {
+                handle->_err = PEL_ERR_JPEG_EASY;
+                return -1;
+            }
+
+            _width = jpeg->width;
+            _height = jpeg->height;
+
+            free(jpeg);
+            break;
+        case PEL_IMG_WEBP: ;
+            webp_easy_webp_t* webp = malloc(sizeof(webp_easy_webp_t));
+            if (_webp_easy_read(fn, webp)) {
+                handle->_err = PEL_ERR_WEBP_EASY;
+                return -1;
+            }
+
+            _width = webp->width;
+            _height = webp->height;
+
+            free(webp);
+            break;
+    }
+
+    if (width) memcpy(width, &_width, sizeof(int));
+    if (height) memcpy(height, &_height, sizeof(int));
+    
+    return 0;
+}
+
 /* Specifying "if in file" is important because we will eventually read both in and out files */
 int _image_read(bool in)
 {

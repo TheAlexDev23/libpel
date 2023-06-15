@@ -3,33 +3,34 @@
 
 #include "pel.h"
 
+int err()
+{
+    fprintf(stderr, "ERROR: %s\n", pel_strerrno());
+    return -1;
+}
+
 int main()
 {
     system("mkdir rectangles");
 
-    if (pel_init("rectangles/rectangle.png", "rectangles/rectangle.png", 100, 100)) {
-        fprintf(stderr, "Error during init %s\n", pel_strerrno());
-        return -1;
-    }
+    pel_set_src_dest("rectangles/rectangle.png", "rectangles/rectangle.png");
 
-    if (pel_draw_rectangle(PEL_COLOR_WHITE, PEL_CORD(-20, 5), PEL_CORD(20, -5))) {
-        fprintf(stderr, "Error during draw rectangle %s\n", pel_strerrno());
-        return -1;
-    }
+    if (pel_init(100, 100)) return err();
 
-    pel_save();
+    if (pel_draw_rectangle(PEL_COLOR_WHITE, PEL_CORD(-20, 5), PEL_CORD(20, -5)))
+        return err();
 
-    if (pel_init("rectangles/rectangle-full.png", "rectangles/rectangle-full.png" , 100, 100)) {
-        fprintf(stderr, "Error during init %s\n", pel_strerrno());
-        return -1;
-    }
+    if (pel_save()) return err();
 
-    if (pel_draw_rectangle_full(PEL_COLOR_WHITE, PEL_CORD(-20, 5), PEL_CORD(20, -5))) {
-        fprintf(stderr, "Error during draw rectangle %s\n", pel_strerrno());
-        return -1;
-    }
+    if (pel_set_src_dest("rectangles/rectangle-full.png", "rectangles/rectangle-full.png"))
+        return err();
 
-    pel_save();
+    if (pel_init(100, 100)) return err();
+
+    if (pel_draw_rectangle_full(PEL_COLOR_WHITE, PEL_CORD(-20, 5), PEL_CORD(20, -5)))
+        return err();
+
+    if (pel_save()) return err();
 
     return 0;
 }

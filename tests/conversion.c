@@ -3,28 +3,30 @@
 
 #include "pel.h"
 
+int err()
+{
+    fprintf(stderr, "ERROR: %s\n", pel_strerrno());
+    return -1;
+}
+
 int main()
 {
     system("mkdir conversions");
 
-    if (pel_init("conversions/file1.png", "conversions/file2.jpeg", 100, 100)) {
-        fprintf(stderr, "Error during init %s", pel_strerrno());
-        return -1;
-    }
+    if (pel_set_src_dest("conversions/file1.png", "conversions/file1.jpeg"))
+        return err();
 
-    if (pel_save()) {
-        fprintf(stderr, "Error during save %s", pel_strerrno());
-        return -1;
-    }
+    if (pel_init(100, 100)) return err();
+
+    if (pel_save()) return err();
+
+    if (pel_set_src_dest("conversions/file1.jpeg", "conversions/file2.webp"))
+        return err();
 
     /* Take into account file.webp should be black not transparent because file1.jpeg is black */
-    if (pel_init("conversions/file1.jpeg", "conversions/file2.webp", 100, 100)) {
-        fprintf(stderr, "Error during init %s", pel_strerrno());
-        return -1;
-    }
+    if (pel_init(0, 0)) 
+        return err();
 
-    if (pel_save()) {
-        fprintf(stderr, "Error during save %s", pel_strerrno());
-        return -1;
-    }
+    if (pel_save())
+        return err();
 }

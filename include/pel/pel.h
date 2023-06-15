@@ -74,8 +74,11 @@ typedef enum _pel_text_align {
  * 
 **********************************/
 
+/* Sets the source and destination files */
+extern int pel_set_src_dest(char* fn_src, char* fn_dst);
+
 /* Initialazes pel */
-extern int pel_init(char* fn_in, char* fn_out, int width, int height);
+int pel_init(int width, int height);
 
 /* Closes pel and saves modifications */
 extern int pel_save();

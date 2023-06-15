@@ -13,6 +13,10 @@ char* pel_strerr(PEL_ERROR err)
             return "PEL internal handle is NULL. Make sure to initialize before use";
         case PEL_ERR_FORMAT:
             return "The provided format is not supported or recognized by PEL";
+        case PEL_ERR_NO_FILE:
+            return "A file needs to exist when it doesn't";
+        case PEL_ERR_DIMENSIONS:
+            return "Requested and file dimensions do not match";
         case PEL_ERR_PNG_EASY:
             return "Error with internal PEL libpng wrapper";
         case PEL_ERR_JPEG_EASY:

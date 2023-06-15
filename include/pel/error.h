@@ -8,6 +8,8 @@ typedef enum _pel_error_codes {
     PEL_SUCCESS = 0,
     PEL_ERR_HANDLE_NULL,
     PEL_ERR_FORMAT,
+    PEL_ERR_NO_FILE,
+    PEL_ERR_DIMENSIONS,
     /* libpng related errors */
     PEL_ERR_PNG_EASY,
     /* libturbopng related errors*/
