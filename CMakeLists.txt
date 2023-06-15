@@ -20,6 +20,8 @@ add_library(
     src/helper/png-easy.h
     src/helper/jpeg-easy.c
     src/helper/jpeg-easy.h
+    src/helper/webp-easy.c
+    src/helper/webp-easy.h
     src/helper/ft-easy.c
     src/helper/ft-easy.h
     src/pixel.c
@@ -35,8 +37,8 @@ add_library(
 
 find_package(PkgConfig REQUIRED)
 
-set(pkgs freetype2 fontconfig libpng libjpeg)
-set(pkg_names FREETYPE FONTCONFIG PNG JPEG)
+set(pkgs freetype2 fontconfig libpng libjpeg libwebp)
+set(pkg_names FREETYPE FONTCONFIG PNG JPEG WEBP)
 set(idx 0)
 
 foreach (PACKAGE IN LISTS pkgs)

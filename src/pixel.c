@@ -84,3 +84,30 @@ void _jpeg_px_set_def_color(uint8_t* px)
     px[1] = _cur_color.g;
     px[2] = _cur_color.b;
 }
+
+void _webp_px_set(uint8_t* px, pel_color_t color)
+{
+    _set_color(color);
+    _webp_px_set_def_color(px);
+}
+
+void _webp_px_set_def_color(uint8_t* px)
+{
+    if (px == NULL) return;
+
+    px[0] = _cur_color.r;
+    px[1] = _cur_color.g;
+    px[2] = _cur_color.b;
+    px[3] = _cur_color.a;
+}
+
+pel_color_t webp_px_to_pel_color(uint8_t* px)
+{
+    pel_color_t color;
+    color.r = px[0];
+    color.g = px[1];
+    color.b = px[2];
+    color.a = px[3];
+
+    return color;
+}

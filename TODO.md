@@ -1,4 +1,3 @@
 ## Formats
 - GIF
 - BMP
-- WebP

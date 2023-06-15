@@ -6,6 +6,7 @@
 typedef enum _pel_image_type {
     PEL_IMG_PNG,
     PEL_IMG_JPEG,
+    PEL_IMG_WEBP,
     PEL_IMG_CORRUPT
 } pel_image_type;
 
