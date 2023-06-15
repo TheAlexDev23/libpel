@@ -5,6 +5,7 @@ C library that allows image manipulation and image editing. Originally written f
 Current supported filetypes include:
 - PNG
 - JPEG
+- WEBP
 
 ## Installation
 
