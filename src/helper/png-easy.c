@@ -12,6 +12,37 @@
 #include "png-easy.h"
 #include "image.h"
 #include "handle.h"
+#include "pixel.h"
+
+int png_bit_depth = 8;
+int png_color_type = PNG_COLOR_TYPE_RGBA;
+
+/* Returns 0 if color_type is not supported otherwise returns libpng format */
+int supported_format(int color_type)
+{
+    switch (color_type)
+    {
+        case PEL_PNG_FORMAT_RGBA:
+            return PNG_COLOR_TYPE_RGBA;
+        case PEL_PNG_FORMAT_RGB:
+            return PNG_COLOR_TYPE_RGB;
+        default:
+            return 0;
+    }
+}
+
+int pel_conf_png(int bit_depth, int color_type)
+{
+    /* We can only configure before calling pel_init and/or after pel_save */
+    if (_pel_get_cur_handle() != NULL) return -1;
+
+    int format;
+    if ((format = supported_format(color_type)) == 0) return -1;
+
+    png_bit_depth = bit_depth;
+    png_color_type = format;
+    return 0;
+}
 
 int _png_easy_read(char* filename, png_easy_png_t* png_easy)
 {
@@ -103,8 +134,8 @@ int _png_easy_create_empty(char* filename, int width, int height)
         info_ptr,
         width,
         height,
-        8, // Bit depth per channel (8-bit in this case)
-        PNG_COLOR_TYPE_RGBA,
+        png_bit_depth,
+        png_color_type,
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_DEFAULT,
         PNG_FILTER_TYPE_DEFAULT);
@@ -115,7 +146,7 @@ int _png_easy_create_empty(char* filename, int width, int height)
     // Allocate memory for the row data
     row = (png_bytep)malloc(4 * width * sizeof(png_byte));
 
-    // Write empty rows (optional)
+    // Write empty rows
     memset(row, 0, 4 * width * sizeof(png_byte));
     for (int i = 0; i < height; i++) {
         png_write_row(png_ptr, row);
@@ -154,14 +185,15 @@ int _png_easy_write(char* filename, png_easy_png_t png_easy)
         png,
         info,
         png_easy.width, png_easy.height,
-        8,
-        PNG_COLOR_TYPE_RGBA,
+        png_easy.bit_depth,
+        png_easy.color_type,
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_DEFAULT,
         PNG_FILTER_TYPE_DEFAULT);
     png_write_info(png, info);
 
-    //png_set_filler(png, 0, PNG_FILLER_AFTER);
+    if (png_easy.color_type == PNG_COLOR_TYPE_RGB)
+        png_set_filler(png, 0, PNG_FILLER_AFTER);
 
     if (!png_easy.row_pointers) return -1;
 
@@ -205,4 +237,38 @@ png_bytep _png_easy_px(png_easy_png_t png, int x, int y)
 
     png_bytep row = png.row_pointers[y];
     return &(row[x * 4]);
+}
+
+void _png_px_set_def_color(png_bytep px)
+{
+    if (px == NULL) return;
+
+    pel_color_t cur_color = _get_color();
+
+    px[0] = cur_color.r;
+    px[1] = cur_color.g;
+    px[2] = cur_color.b;
+    px[3] = cur_color.a;
+}
+
+void _png_px_set(png_bytep px, pel_color_t color)
+{
+    if (px == NULL) return;
+
+    _set_color(color);
+    _png_px_set_def_color(px);
+}
+
+/* Converts a png pixel into a pel color */
+pel_color_t png_px_to_pel_color(png_bytep px)
+{
+    pel_color_t pel_color;
+    if (px == NULL) return pel_color;
+
+    pel_color.r = px[0];
+    pel_color.g = px[1];
+    pel_color.b = px[2];
+    pel_color.a = px[3];
+    
+    return pel_color;
 }

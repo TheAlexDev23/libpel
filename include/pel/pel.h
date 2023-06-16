@@ -10,6 +10,11 @@ typedef enum _pel_image_type {
     PEL_IMG_CORRUPT
 } pel_image_type;
 
+typedef enum {
+    PEL_PNG_FORMAT_RGBA,
+    PEL_PNG_FORMAT_RGB
+} pel_png_format;
+
 /********************************
  * 
  *  Colors
@@ -78,10 +83,25 @@ typedef enum _pel_text_align {
 extern int pel_set_src_dest(char* fn_src, char* fn_dst);
 
 /* Initialazes pel */
-int pel_init(int width, int height);
+extern int pel_init(int width, int height);
 
 /* Closes pel and saves modifications */
 extern int pel_save();
+
+
+/********************************
+ * 
+ *  Configuration
+ * 
+**********************************/
+
+/* Modifies the default configuration values when creating PNGs. */
+extern int pel_conf_png(int bit_depth, int color_type);
+/* Modifies the default configuration values when creating JPEGs. */
+extern int pel_conf_jpeg();
+/* Modifies the default configuration values when creating WebPs. */
+extern int pel_conf_webp();
+
 
 /********************************
  * 

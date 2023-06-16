@@ -27,5 +27,8 @@ typedef void (*_png_easy_draw_cb)(int x, int y, png_bytep px);
 int _png_easy_draw(png_easy_png_t png, _png_easy_draw_cb draw_cb, pel_cord_t rect_start, pel_cord_t rect_end);
 
 png_bytep _png_easy_px(png_easy_png_t png, int x, int y);
+void _png_px_set(png_bytep px, pel_color_t color);
+void _png_px_set_def_color(png_bytep px);
+pel_color_t png_px_to_pel_color(png_bytep px);
 
 #endif

@@ -376,6 +376,8 @@ int _image_write()
         return -1;
     }
 
+    png_easy_png_t png_easy = png_from_handle(handle, false);
+
     switch (handle->_image_out_type) {
         case PEL_IMG_PNG: ;
             if (_png_easy_write(handle->_fn_out, png_from_handle(handle, false))) {
