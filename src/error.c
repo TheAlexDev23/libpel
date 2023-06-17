@@ -20,7 +20,7 @@ char* pel_strerr(PEL_ERROR err)
         case PEL_ERR_PNG_EASY:
             return "Error with internal PEL libpng wrapper";
         case PEL_ERR_JPEG_EASY:
-            return "Error with internal PEL libturbojpeg wrapper";
+            return "Error with internal PEL libjpeg wrapper";
         case PEL_ERR_FT_EASY:
             return "Error with internal PEL freetype wrapper";
         case PEL_ERR_FT_FONT_NOT_FOUND:

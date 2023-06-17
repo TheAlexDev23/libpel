@@ -31,5 +31,14 @@ int main()
     
     if (pel_save()) return err();
 
+    if (pel_conf_jpeg(50)) return err();
+
+    if (pel_set_src_dest("custom_formats/quality50.jpeg", "custom_formats/quality50.jpeg"))
+        return err();
+
+    if (pel_init(100, 100)) return err();
+    
+    if (pel_save()) return err();
+
     return 0;
 }

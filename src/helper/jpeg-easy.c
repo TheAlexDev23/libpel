@@ -12,16 +12,66 @@
 #include "handle.h"
 #include "pixel.h"
 
+/*
+* Configuration
+*/
+int jpeg_quality = 90;
+
+int pel_conf_jpeg(int quality)
+{
+    if (_pel_get_cur_handle() != NULL) return -1;
+
+    if (quality > 0 && quality <= 100)
+        jpeg_quality = quality;
+    else
+        return -1;
+
+    return 0;
+}
+
+/*
+* Error handling
+*/
+struct easy_jpeg_error_mgr {
+    struct jpeg_error_mgr pub;
+    jmp_buf set_jmp_buffer;
+};
+
+typedef struct easy_jpeg_error_mgr* easy_error_ptr;
+
+void easy_jpeg_error_exit(j_common_ptr cinfo)
+{
+    // TODO: Add configuration for error logging
+    easy_error_ptr err = (easy_error_ptr) cinfo->err;
+    fprintf(stderr, "PEL: jpeglib error: ");
+    /* Call libjpeg default printing function */
+    (*cinfo->err->output_message)(cinfo);
+
+    longjmp(err->set_jmp_buffer, 1);
+}
+
 int _jpeg_easy_create_empty(char* filename, int width, int height)
 {
     // TODO: Add custom compression options for _jpeg_easy_create_empty
     
     /* TurboJPEG doesn't allow writing headers, so we need to use libjpeg */
     struct jpeg_compress_struct cinfo;
-    struct jpeg_error_mgr jerr;
+    struct easy_jpeg_error_mgr jerr;
 
-    cinfo.err = jpeg_std_error(&jerr);
+    FILE *fp = fopen(filename, "wb");
+    if (fp == NULL) return -1;
+
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = easy_jpeg_error_exit;
+
     jpeg_create_compress(&cinfo);
+
+    if (setjmp(jerr.set_jmp_buffer)) {
+        /* At this point something went wrong */
+        jpeg_destroy_compress(&cinfo);
+        fclose(fp);
+        return -1;
+    }
 
     cinfo.image_width = width;
     cinfo.image_height = height;
@@ -29,11 +79,8 @@ int _jpeg_easy_create_empty(char* filename, int width, int height)
     cinfo.in_color_space = JCS_RGB;
 
     jpeg_set_defaults(&cinfo);
-    jpeg_set_quality(&cinfo, PEL_JPEG_EASY_QUALITY, TRUE);
+    jpeg_set_quality(&cinfo, jpeg_quality, TRUE);
 
-    FILE *fp = fopen(filename, "wb");
-    if (fp == NULL)
-        return -1;
     jpeg_stdio_dest(&cinfo, fp);
 
     jpeg_start_compress(&cinfo, true);
@@ -60,23 +107,33 @@ int _jpeg_easy_create_empty(char* filename, int width, int height)
 
 int _jpeg_easy_read(char *filename, jpeg_easy_jpeg_t *jpeg)
 {
-    struct jpeg_decompress_struct info;
+    struct jpeg_decompress_struct cinfo;
 
     struct jpeg_error_mgr err;
-    info.err = jpeg_std_error(&err);
+    struct easy_jpeg_error_mgr jerr;
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = easy_jpeg_error_exit;
 
-    jpeg_create_decompress(&info);
+    jpeg_create_decompress(&cinfo);
 
     FILE* fp = fopen(filename, "rb");
     if (fp == NULL) return -1;
-    jpeg_stdio_src(&info, fp);
 
-    jpeg_read_header(&info, true);
-    jpeg_start_decompress(&info);
+    if (setjmp(jerr.set_jmp_buffer)) {
+        /* At this point something went wrong */
+        jpeg_destroy_decompress(&cinfo);
+        fclose(fp);
+        return -1;
+    }
 
-    int width = info.output_width;
-    int height = info.output_height;
-    int row_size = info.output_width * info.output_components;
+    jpeg_stdio_src(&cinfo, fp);
+
+    jpeg_read_header(&cinfo, true);
+    jpeg_start_decompress(&cinfo);
+
+    int width = cinfo.output_width;
+    int height = cinfo.output_height;
+    int row_size = cinfo.output_width * cinfo.output_components;
 
     jpeg->width = width;
     jpeg->height = height;
@@ -89,13 +146,13 @@ int _jpeg_easy_read(char *filename, jpeg_easy_jpeg_t *jpeg)
 
     uint8_t* row_buffer[1];
 
-    while (info.output_scanline < height) {
-        row_buffer[0] = &(jpeg->pixels[row_size * info.output_scanline]);
-        jpeg_read_scanlines(&info, row_buffer, 1);
+    while (cinfo.output_scanline < height) {
+        row_buffer[0] = &(jpeg->pixels[row_size * cinfo.output_scanline]);
+        jpeg_read_scanlines(&cinfo, row_buffer, 1);
     }
 
-    jpeg_finish_decompress(&info);
-    jpeg_destroy_decompress(&info);
+    jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
 
     fclose(fp);
 
@@ -110,15 +167,22 @@ int _jpeg_easy_write(char *filename, jpeg_easy_jpeg_t jpeg)
     int row_size = jpeg.row_size;
 
     struct jpeg_compress_struct cinfo;
-
-    struct jpeg_error_mgr jerr;
-    cinfo.err = jpeg_std_error(&jerr);
+    struct easy_jpeg_error_mgr jerr;
+    cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = easy_jpeg_error_exit;
 
     jpeg_create_compress(&cinfo);
 
     FILE *fp = fopen(filename, "wb");
-    if (fp == NULL)
+    if (fp == NULL) return -1;
+
+    if (setjmp(jerr.set_jmp_buffer)) {
+        /* At this point something went wrong */
+        jpeg_destroy_compress(&cinfo);
+        fclose(fp);
         return -1;
+    }
+
     jpeg_stdio_dest(&cinfo, fp);
 
     cinfo.image_width = width;

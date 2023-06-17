@@ -113,5 +113,7 @@ int pel_save()
 
     _pel_free_cur_handle();
 
+    _pel_set_cur_handle(NULL);
+
     return 0;
 }

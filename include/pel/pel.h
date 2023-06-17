@@ -108,7 +108,7 @@ extern int pel_save();
 */
 extern int pel_conf_png(int bit_depth, int color_type);
 /* Modifies the default configuration values when creating JPEGs. */
-extern int pel_conf_jpeg();
+extern int pel_conf_jpeg(int quality);
 /* Modifies the default configuration values when creating WebPs. */
 extern int pel_conf_webp();
 
