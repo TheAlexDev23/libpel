@@ -21,6 +21,7 @@ typedef enum {
  * 
 **********************************/
 
+/* Pel works with RGBA values even with RGB or other format images */
 typedef struct _pel_color {
     int r;
     int g;
@@ -51,6 +52,7 @@ typedef struct _pel_cord {
     int _y;
 } pel_cord_t;
 
+/* Facilitates the creatin of pel_cord_t */
 #define PEL_CORD(x, y) (pel_cord_t){._x = x, ._y = y}
 
 /********************************
@@ -65,6 +67,7 @@ typedef struct _pel_font {
     int size;
 } pel_font_t;
 
+/* Facilitates the creation of pel_font_t */
 #define PEL_FONT(family, style, sz) (pel_font_t){.font_family = family, .font_style = style, .size = sz}
 
 typedef enum _pel_text_align {
@@ -79,7 +82,11 @@ typedef enum _pel_text_align {
  * 
 **********************************/
 
-/* Sets the source and destination files */
+/* 
+* Sets the source and destination files 
+* @param fn_src Filename of 'in' file
+* @param fn_dst Filename of 'out' file
+*/
 extern int pel_set_src_dest(char* fn_src, char* fn_dst);
 
 /* Initialazes pel */
@@ -95,7 +102,10 @@ extern int pel_save();
  * 
 **********************************/
 
-/* Modifies the default configuration values when creating PNGs. */
+/* 
+* Modifies the default configuration values when creating PNGs. 
+* @param color_type should be pel_png_format
+*/
 extern int pel_conf_png(int bit_depth, int color_type);
 /* Modifies the default configuration values when creating JPEGs. */
 extern int pel_conf_jpeg();
@@ -137,7 +147,10 @@ extern int pel_draw_rectangle_full(pel_color_t brush_color, pel_cord_t start, pe
 extern int pel_draw_line(pel_color_t brush_color, pel_cord_t start, pel_cord_t end);
 
 /*
-* Draws text with selected font. With defines the point when should go next line, line_offset is the separation betweeen lines.
+* Writes a textbox
+* @param box_width Upon reaching this width will write on next line
+* @param line_offset Offset when going on to next line. Font height isn't taken into account when computing offset so line_offset is the only factor that affects line separation
+* @param cords coordinates relative center for text placement.
 */
 extern int pel_draw_textbox(pel_color_t brush_color, pel_font_t font, int box_width, int line_offset, pel_text_align_t align, char* text, pel_cord_t cords);
 

@@ -16,14 +16,14 @@ typedef struct _jpeg_easy_jpeg {
 
 #define PEL_JPEG_EASY_QUALITY 90
 
-/* Creates empty default jpeg */
-int _jpeg_easy_create_empty(char* filename, int width, int height);
-
-/* Reades filename data into jpeg */
+/* Reads filename image data into jpeg */
 int _jpeg_easy_read(char* filename, jpeg_easy_jpeg_t* jpeg);
 
-/* Writes jpeg data into filename */
+/* Writes jpeg image data into filename */
 int _jpeg_easy_write(char* filename, jpeg_easy_jpeg_t jpeg);
+
+/* Creates empty jpeg with current configuration */
+int _jpeg_easy_create_empty(char* filename, int width, int height);
 
 /* Callback used for _jpeg_easy_draw */
 typedef void (*_jpeg_easy_draw_cb)(int x, int y, uint8_t* px);

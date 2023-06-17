@@ -44,63 +44,63 @@ int pel_conf_png(int bit_depth, int color_type)
     return 0;
 }
 
-int _png_easy_read(char* filename, png_easy_png_t* png_easy)
+int _png_easy_read(char* filename, png_easy_png_t* png)
 {
     FILE *fp = fopen(filename, "rb");
 
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png) return -1;
+    png_structp png_struct = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_struct) return -1;
 
-    png_infop info = png_create_info_struct(png); 
+    png_infop info = png_create_info_struct(png_struct); 
     if (!info) return -1;
 
-    if (setjmp(png_jmpbuf(png))) return -1;
+    if (setjmp(png_jmpbuf(png_struct))) return -1;
 
-    png_init_io(png, fp);
+    png_init_io(png_struct, fp);
 
-    png_read_info(png, info);
+    png_read_info(png_struct, info);
 
-    png_easy->width = png_get_image_width(png, info);
-    png_easy->height = png_get_image_height(png, info);
-    png_easy->color_type = png_get_color_type(png, info);
-    png_easy->bit_depth = png_get_bit_depth(png, info);
+    png->width = png_get_image_width(png_struct, info);
+    png->height = png_get_image_height(png_struct, info);
+    png->color_type = png_get_color_type(png_struct, info);
+    png->bit_depth = png_get_bit_depth(png_struct, info);
 
-    if (png_easy->bit_depth == 16)
-        png_set_strip_16(png);
+    if (png->bit_depth == 16)
+        png_set_strip_16(png_struct);
 
-    if (png_easy->color_type == PNG_COLOR_TYPE_PALETTE)
-        png_set_palette_to_rgb(png);
+    if (png->color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_palette_to_rgb(png_struct);
 
     // PNG_COLOR_TYPE_GRAY_ALPHA is always 8 or 16bit depth.
-    if (png_easy->color_type == PNG_COLOR_TYPE_GRAY && png_easy->bit_depth < 8)
-        png_set_expand_gray_1_2_4_to_8(png);
+    if (png->color_type == PNG_COLOR_TYPE_GRAY && png->bit_depth < 8)
+        png_set_expand_gray_1_2_4_to_8(png_struct);
 
-    if (png_get_valid(png, info, PNG_INFO_tRNS))
-        png_set_tRNS_to_alpha(png);
+    if (png_get_valid(png_struct, info, PNG_INFO_tRNS))
+        png_set_tRNS_to_alpha(png_struct);
 
     // These color_type don't have an alpha channel then fill it with 0xff.
-    if (png_easy->color_type == PNG_COLOR_TYPE_RGB ||
-        png_easy->color_type == PNG_COLOR_TYPE_GRAY ||
-        png_easy->color_type == PNG_COLOR_TYPE_PALETTE)
-        png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
+    if (png->color_type == PNG_COLOR_TYPE_RGB ||
+        png->color_type == PNG_COLOR_TYPE_GRAY ||
+        png->color_type == PNG_COLOR_TYPE_PALETTE)
+        png_set_filler(png_struct, 0xFF, PNG_FILLER_AFTER);
 
-    if (png_easy->color_type == PNG_COLOR_TYPE_GRAY ||
-        png_easy->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
-        png_set_gray_to_rgb(png);
+    if (png->color_type == PNG_COLOR_TYPE_GRAY ||
+        png->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+        png_set_gray_to_rgb(png_struct);
 
-    png_read_update_info(png, info);
+    png_read_update_info(png_struct, info);
 
-    png_easy->row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * png_easy->height);
-    for (int y = 0; y < png_easy->height; y++)
+    png->row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * png->height);
+    for (int y = 0; y < png->height; y++)
     {
-        png_easy->row_pointers[y] = (png_byte *)malloc(png_get_rowbytes(png, info));
+        png->row_pointers[y] = (png_byte *)malloc(png_get_rowbytes(png_struct, info));
     }
 
-    png_read_image(png, png_easy->row_pointers);
+    png_read_image(png_struct, png->row_pointers);
 
     fclose(fp);
 
-    png_destroy_read_struct(&png, &info, NULL);
+    png_destroy_read_struct(&png_struct, &info, NULL);
 
     return 0;
 }
@@ -163,52 +163,52 @@ int _png_easy_create_empty(char* filename, int width, int height)
     return 0;
 }
 
-int _png_easy_write(char* filename, png_easy_png_t png_easy)
+int _png_easy_write(char* filename, png_easy_png_t png)
 {
     int y;
 
     FILE *fp = fopen(filename, "wb");
     if (!fp) return -1;
 
-    png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png) return -1;
+    png_structp png_struct = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (!png_struct) return -1;
 
-    png_infop info = png_create_info_struct(png);
+    png_infop info = png_create_info_struct(png_struct);
     if (!info) return -1;
 
-    if (setjmp(png_jmpbuf(png))) return -1;
+    if (setjmp(png_jmpbuf(png_struct))) return -1;
 
-    png_init_io(png, fp);
+    png_init_io(png_struct, fp);
 
     // Output is 8bit depth, RGBA format.
     png_set_IHDR(
-        png,
+        png_struct,
         info,
-        png_easy.width, png_easy.height,
-        png_easy.bit_depth,
-        png_easy.color_type,
+        png.width, png.height,
+        png.bit_depth,
+        png.color_type,
         PNG_INTERLACE_NONE,
         PNG_COMPRESSION_TYPE_DEFAULT,
         PNG_FILTER_TYPE_DEFAULT);
-    png_write_info(png, info);
+    png_write_info(png_struct, info);
 
-    if (png_easy.color_type == PNG_COLOR_TYPE_RGB)
-        png_set_filler(png, 0, PNG_FILLER_AFTER);
+    if (png.color_type == PNG_COLOR_TYPE_RGB)
+        png_set_filler(png_struct, 0, PNG_FILLER_AFTER);
 
-    if (!png_easy.row_pointers) return -1;
+    if (!png.row_pointers) return -1;
 
-    png_write_image(png, png_easy.row_pointers);
-    png_write_end(png, NULL);
+    png_write_image(png_struct, png.row_pointers);
+    png_write_end(png_struct, NULL);
 
-    for (int y = 0; y < png_easy.height; y++)
+    for (int y = 0; y < png.height; y++)
     {
-        free(png_easy.row_pointers[y]);
+        free(png.row_pointers[y]);
     }
-    free(png_easy.row_pointers);
+    free(png.row_pointers);
 
     fclose(fp);
 
-    png_destroy_write_struct(&png, &info);
+    png_destroy_write_struct(&png_struct, &info);
 
     return 0;
 }
