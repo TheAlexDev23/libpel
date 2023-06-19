@@ -164,4 +164,13 @@ extern int pel_draw_triangle(pel_color_t brush_color, pel_cord_t p1, pel_cord_t 
 */
 extern int pel_draw_triangle_full(pel_color_t brush_color, pel_cord_t p1, pel_cord_t p2, pel_cord_t p3);
 
+
+/********************************
+ * 
+ *  Filters
+ * 
+**********************************/
+
+extern int pel_filter_graysacle();
+
 #endif

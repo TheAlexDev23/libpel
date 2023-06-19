@@ -10,10 +10,30 @@
 #include "state.h"
 #include "pixel.h"
 
+int dir_after_symbol(char* symb)
+{
+    for (char* ptr = symb; *ptr != '\0'; ptr++) {
+        // TODO: Change dir symbol if making multiplatform in dif_after_symbol
+        if (*ptr == '/')
+            return -1;
+    }
+    return 0;
+}
+
 /* Returns the image type according to the extension of the file fn */
 pel_image_type _image_type(char* fn)
 {
-    char* extension = strstr(fn, ".");
+    char* extension = malloc(strlen(fn));
+    strcpy(extension, fn);
+    restart_ext_search:;
+    
+    extension = strstr(extension, ".");
+    if (extension == NULL) goto exit_err;
+    if (dir_after_symbol(extension)) {
+        extension = strstr(extension, "/");
+        if (extension == NULL) goto exit_err;
+        goto restart_ext_search;
+    }
     
     if (strcmp(extension, ".png") == 0) {
         return PEL_IMG_PNG;
@@ -23,6 +43,8 @@ pel_image_type _image_type(char* fn)
         return PEL_IMG_WEBP;
     }
 
+    exit_err:
+    free(extension);
     return PEL_IMG_CORRUPT;
 }
 
@@ -161,8 +183,8 @@ int _image_dimensions(char* fn, int* width, int* height)
             break;
     }
 
-    if (width) memcpy(width, &_width, sizeof(int));
-    if (height) memcpy(height, &_height, sizeof(int));
+    if (width) *width = _width;
+    if (height) *height = _height;
     
     return 0;
 }
@@ -278,8 +300,8 @@ int _image_draw(_pel_image_draw_cb_t draw_cb)
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
-    pel_cord_t screen_start = PEL_CORD(0, 0);
-    pel_cord_t screen_end = PEL_CORD(handle->_width, handle->_height);
+    pel_cord_t screen_start = PEL_CORD(-handle->_centerX, -handle->_centerY);
+    pel_cord_t screen_end = PEL_CORD(handle->_centerX, handle->_centerY);
 
     return _image_draw_rect(draw_cb, screen_start, screen_end);
 }

@@ -13,7 +13,8 @@ int main()
 {
     system("mkdir rectangles");
 
-    pel_set_src_dest("rectangles/rectangle.png", "rectangles/rectangle.png");
+    if (pel_set_src_dest("rectangles/rectangle.png", "rectangles/rectangle.png"))
+        return err();
 
     if (pel_init(100, 100)) return err();
 

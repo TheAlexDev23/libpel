@@ -12,6 +12,8 @@
 /* Makes x,y = center + x,y on an mathematical grid  */
 #define get_xy_rel_grid_center(x, y, handle) (x = x - handle->_centerX) * -1; y = (y - handle->_centerY) * -1;
 
+#define cord_rel_img_center(cord, handle) get_xy_rel_img_center(cord._x, cord._y, handle)
+
 /* Returns the image type according to the extension of the file fn */
 pel_image_type _image_type(char* fn);
 

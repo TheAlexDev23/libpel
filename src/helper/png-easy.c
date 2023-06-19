@@ -107,11 +107,11 @@ int _png_easy_read(char* filename, png_easy_png_t* png)
 
 int _png_easy_create_empty(char* filename, int width, int height)
 {
-    FILE *fp;
     png_structp png_ptr = NULL;
     png_infop info_ptr = NULL;
     png_bytep row = NULL;
 
+    FILE *fp;
     fp = fopen(filename, "wb");
     if (!fp) return -1;
 

@@ -33,6 +33,7 @@ add_library(
     src/shapes/rectangle.c
     src/shapes/text.c
     src/shapes/triangle.c
+    src/filters.c
 )
 
 find_package(PkgConfig REQUIRED)
