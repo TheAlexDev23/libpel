@@ -23,7 +23,7 @@ int dir_after_symbol(char* symb)
 /* Returns the image type according to the extension of the file fn */
 pel_image_type _image_type(char* fn)
 {
-    char* extension = malloc(strlen(fn));
+    char* extension = malloc(strlen(fn) + 1);
     strcpy(extension, fn);
     restart_ext_search:;
     
