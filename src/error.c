@@ -11,6 +11,8 @@ char* pel_strerr(PEL_ERROR err)
     switch(err) {
         case PEL_ERR_HANDLE_NULL:
             return "PEL internal handle is NULL. Make sure to initialize before use";
+        case PEL_ERR_SRC_DST_NOT_SPECIFIED:
+            return "PEL internal handle doesn't contain a reference to output or destination files. Please call pel_set_src_dst before initializing pel";
         case PEL_ERR_FORMAT:
             return "The provided format is not supported or recognized by PEL";
         case PEL_ERR_NO_FILE:

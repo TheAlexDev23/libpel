@@ -7,6 +7,7 @@ typedef enum _pel_error_codes {
     PEL_ERR_UNKOWN = -1,
     PEL_SUCCESS = 0,
     PEL_ERR_HANDLE_NULL,
+    PEL_ERR_SRC_DST_NOT_SPECIFIED,
     PEL_ERR_FORMAT,
     PEL_ERR_NO_FILE,
     PEL_ERR_DIMENSIONS,

@@ -46,11 +46,18 @@ int pel_init(int width, int height)
     pel_handle_t* handle = _pel_get_cur_handle();
     if (handle == NULL) return -1;
 
+    if (handle->_fn_in == NULL ||
+        handle->_fn_out == NULL) {
+        handle->_err = PEL_ERR_SRC_DST_NOT_SPECIFIED;
+        return -1;
+    }
+
     int fn_in_exists = !access(handle->_fn_in, F_OK);
     int fn_out_exists = !access(handle->_fn_out, F_OK);
 
     handle->_err = PEL_SUCCESS;
 
+    // TODO: reorganize later
     if (width == 0 && fn_in_exists) {
         if (_image_dimensions(handle->_fn_in, &width, NULL))
             return -1;
